@@ -17,9 +17,9 @@ dependencies:
   url_launcher: ^6.0.18
   image_picker: ^0.8.4+4
   cached_network_image: ^3.2.0
-  path_provider: ^2.0.8
-  permission_handler: ^8.3.0
-  geolocator: ^8.0.3
+#  path_provider: ^2.0.8
+#  permission_handler: ^8.3.0
+#  geolocator: ^8.0.3
   fluttertoast: ^8.0.8
   logger: ^1.1.0
   pull_to_refresh: ^2.0.0

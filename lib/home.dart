@@ -20,19 +20,22 @@ class _HomeState extends State<Home> {
         child: Text("body"),
       ),
       extendBody: true,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: AppConfig.showFloatingActionButton? FloatingActionButton(
         onPressed: () {  },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
+      ):null,
+      floatingActionButtonLocation: AppConfig.showFloatingActionButton? AppConfig.floatingActionButtonLocation : null,
+      bottomNavigationBar: AppConfig.showBottomBar ? BottomAppBar(
         shape: const CircularNotchedRectangle(),
-        child: Row(
+        child:  Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: AppConfig.bottomNavItem.map<Widget>((e) =>
-              Text(e.title)
+              Container(
+                height: 60,
+                child:  Text(e.title),
+              )
           ).toList(),
         ),
-      )
+      ) : null
     );
   }
 }

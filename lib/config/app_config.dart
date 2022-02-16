@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class AppConfig{
   static const  String title = "title";
+  static const  String serverUrl = "http://sf.ligengxin.com/api.php/v1";
   static  List<BottomNavItemModel> bottomNavItem = [
     BottomNavItemModel(title:"nav1",icon: Icon(Icons.ac_unit)),
     BottomNavItemModel(title:"nav1",icon: Icon(Icons.ac_unit)),

@@ -1,4 +1,4 @@
-package com.wanghuiwen.base_app
+package com.wanghuiwen.app
 
 import io.flutter.embedding.android.FlutterActivity
 

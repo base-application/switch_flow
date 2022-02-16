@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wanghuiwen.base_app">
+    package="com.wanghuiwen.app">
    <application
-        android:label="base_app"
+        android:label="app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

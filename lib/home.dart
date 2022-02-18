@@ -1,6 +1,5 @@
 import 'package:base_app/config/app_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class _HomeState extends State<Home> {
         child:  Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: AppConfig.bottomNavItem.map<Widget>((e) =>
-              Container(
+              SizedBox(
                 height: 60,
                 child:  Text(e.title),
               )

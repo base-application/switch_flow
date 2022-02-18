@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:base_app/model/auth_user_entity.dart';
-import 'package:base_app/privider/auth_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum CacheKey{

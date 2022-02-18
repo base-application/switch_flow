@@ -1,9 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/request/api.dart';
 import 'package:base_app/router/app_router.gr.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -23,6 +21,7 @@ class _LoginState extends State<Login> {
         title: const Text("Login"),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(

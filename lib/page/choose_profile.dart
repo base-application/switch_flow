@@ -1,7 +1,11 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:base_app/config/app_config.dart';
 import 'package:base_app/model/company_entity.dart';
 import 'package:base_app/model/index_entity.dart';
+import 'package:base_app/page/commen.dart';
 import 'package:base_app/page/top_company.dart';
 import 'package:base_app/request/api.dart';
+import 'package:base_app/router/app_router.gr.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,18 +39,10 @@ class _ChooseProfileState extends State<ChooseProfile> {
       future: _company,
       builder: (BuildContext context, AsyncSnapshot<Company?> snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting){
-          return const Material(
-            child: Center(
-              child: Text("加载中"),
-            ),
-          );
+          return const Loading();
         }
         if(snapshot.hasError){
-          return  Material(
-            child: Center(
-              child: Text(snapshot.error.toString()),
-            ),
-          );
+          return ErrorPage(error: snapshot.error.toString(),);
         }
         if(snapshot.hasData){
           Company company = snapshot.data!;
@@ -58,7 +54,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
                   TopCompany(company: company,),
 
                   const Divider(),
-                  const Text("preventive_maintenance_checklist"),
+                  const Text("Preventive Maintenance & Performance Monitoring"),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -68,9 +64,9 @@ class _ChooseProfileState extends State<ChooseProfile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("name"),
-                        Text("NAME"),
-                        Text("Customer"),
+                        const Text("name"),
+                        const Text("NAME"),
+                        const Text("Customer"),
                         DropdownSearch<IndexSelect>(
                             mode: Mode.MENU,
                             showSelectedItems: false,
@@ -87,31 +83,38 @@ class _ChooseProfileState extends State<ChooseProfile> {
                               }
                             }
                         ),
-                        Text("Type Of Check List"),
+                        const Text("Type Of Check List"),
                         DropdownSearch<String>(
                             key: _categoryKey,
                             mode: Mode.MENU,
                             showSelectedItems: true,
                             items: _categories?.map((e) => e).toList()??[],
                             onChanged: (v){
-
+                              _category = v;
                             }
                         ),
-                        Text("Plant"),
+                        const Text("Plant"),
                         DropdownSearch<String>(
                             key: _plantKey,
                             mode: Mode.MENU,
                             showSelectedItems: true,
                             items: _plants?.map((e) => e).toList()??[],
                             onChanged: (v){
-
+                              _plant = v;
                             }
                         ),
                       ],
                     ),
                   ),
                   ElevatedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        if(_category?.toLowerCase() == Category.performance.name){
+                          AutoRouter.of(context).push(PerformanceRoute(indexSelect: _indexSelect!, plant: _plant!));
+                        }
+                        if(_category?.toLowerCase() == Category.preventive.name){
+                          AutoRouter.of(context).push(PreventiveRoute(indexSelect: _indexSelect!, plant: _plant!));
+                        }
+                      },
                       child: const Text("ENTER")
                   ),
                   Text(DateFormat().format(DateTime.now()))
@@ -120,11 +123,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
             ),
           );
         }
-        return  const Material(
-          child: Center(
-            child: Text("no Data"),
-          ),
-        );
+        return  const ErrorPage(error: "no Data",);
       },);
   }
 }

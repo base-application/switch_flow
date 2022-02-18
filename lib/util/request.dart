@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:base_app/config/app_config.dart';
 import 'package:base_app/model/auth_user_entity.dart';
 import 'package:base_app/privider/auth_provider.dart';
@@ -120,7 +119,7 @@ class Request {
 
   static toast(String message){
     Fluttertoast.showToast(
-      backgroundColor: Color(0xffFF844B),
+      backgroundColor: const Color(0xffFF844B),
       msg: message,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,

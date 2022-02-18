@@ -45,6 +45,9 @@ class PerformanceForm {
 class Content {
   String? title;
   String? first;
+  String? second;
+  String? location;
+  String? machine;
   List<Child>? child;
 
   Content({this.title, this.first, this.child});
@@ -52,6 +55,9 @@ class Content {
   Content.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     first = json['first'];
+    second = json['second'];
+    machine = json['machine'];
+    location = json['location'];
     if (json['child'] != null) {
       child = <Child>[];
       json['child'].forEach((v) {
@@ -64,6 +70,9 @@ class Content {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['title'] = title;
     data['first'] = first;
+    data['second'] = second;
+    data['machine'] = machine;
+    data['location'] = location;
     if (child != null) {
       data['child'] = child!.map((v) => v.toJson()).toList();
     }
@@ -75,12 +84,14 @@ class Child {
   String? operate;
   String? value;
   String? lable;
+  String? letter;
 
   Child({this.operate, this.value, this.lable});
 
   Child.fromJson(Map<String, dynamic> json) {
     operate = json['operate'];
     value = json['value'];
+    letter = json['letter'];
     lable = json['lable'];
   }
 
@@ -88,6 +99,7 @@ class Child {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['operate'] = operate;
     data['value'] = value;
+    data['letter'] = letter;
     data['lable'] = lable;
     return data;
   }

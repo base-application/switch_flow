@@ -2,6 +2,7 @@ import 'package:base_app/model/auth_user_entity.dart';
 import 'package:base_app/model/company_entity.dart';
 import 'package:base_app/model/index_entity.dart';
 import 'package:base_app/model/performance_form.dart';
+import 'package:base_app/model/preventive_form.dart';
 import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/util/request.dart';
 import 'package:base_app/util/request_model.dart';
@@ -15,6 +16,7 @@ class Api {
 
     if(response.code !=1) return false;
     AuthUserEntity authUserEntity =  AuthUserEntity.fromJson(response.data);
+    authUserEntity.name = username;
     Provider.of<AuthProvider>(context,listen: false).authUserEntity = authUserEntity;
     return true;
   }
@@ -34,11 +36,16 @@ class Api {
     return company;
   }
 
-  static Future<List<PerformanceForm>?> performanceForm(BuildContext context) async{
-    List<IndexSelect> select = await index(context);
-    ResponseModel response = await Request(context).post("/performance/index");
+  static Future<List<PerformanceForm>?> performanceForm(BuildContext context,int cid) async{
+    ResponseModel response = await Request(context).post("/performance/index",data: FormData.fromMap({"cid":cid}));
     if(response.code !=1) return null;
     List<PerformanceForm> list =  response.data.map<PerformanceForm>((e)=>PerformanceForm.fromJson(e)).toList();
     return list;
+  }
+
+  static Future<PreventiveForm?> preventiveForm(BuildContext context,int cid) async{
+    ResponseModel response = await Request(context).post("/preventive/index",data: FormData.fromMap({"cid":cid}));
+    if(response.code !=1) return null;
+    return PreventiveForm.fromJson(response.data);
   }
 }

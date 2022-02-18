@@ -22,13 +22,13 @@ class Company {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['address'] = this.address;
-    data['phone'] = this.phone;
-    data['fax'] = this.fax;
-    data['email'] = this.email;
-    data['site'] = this.site;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['title'] = title;
+    data['address'] = address;
+    data['phone'] = phone;
+    data['fax'] = fax;
+    data['email'] = email;
+    data['site'] = site;
     return data;
   }
 }

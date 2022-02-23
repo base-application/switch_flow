@@ -1,14 +1,19 @@
 
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:base_app/config/app_config.dart';
 import 'package:base_app/config/input_formtter.dart';
 import 'package:base_app/model/index_entity.dart';
 import 'package:base_app/model/performance_form.dart';
 import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/request/api.dart';
+import 'package:base_app/util/request.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:signature/signature.dart';
 
 import 'commen.dart';
 
@@ -25,10 +30,15 @@ class Performance extends StatefulWidget {
 
 class _PerformanceState extends State<Performance> {
   late Future<List<PerformanceForm>?> _performanceForm;
-
+  final SignatureController _controller = SignatureController(
+    penStrokeWidth: 1,
+    penColor: Colors.red,
+    exportBackgroundColor: Colors.blue,
+    onDrawStart: () => print('onDrawStart called!'),
+    onDrawEnd: () => print('onDrawEnd called!'),
+  );
   final TextEditingController _node1 = TextEditingController();
   final TextEditingController _node2 = TextEditingController();
-  String? _autographImg;
   final TextEditingController _autographText = TextEditingController();
   Map<String,dynamic> extra = {};
 
@@ -166,7 +176,18 @@ class _PerformanceState extends State<Performance> {
                 ],
               ),
               const Text("Customer Acknowledge:"),
-              const Text("签名"),
+              Row(
+                children: [
+                  const Text("签名"),
+                  Expanded(
+                    child: Signature(
+                      controller: _controller,
+                      height: 150,
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   const Text("Acknowledged by :"),
@@ -182,11 +203,16 @@ class _PerformanceState extends State<Performance> {
                 ],
               ),
               ElevatedButton(
-                  onPressed: (){
+                  onPressed: () async {
+                    if(_controller.isEmpty){
+                      Request.toast("sing");
+                      return;
+                    }
                     extra['note1'] = _node1.text;
                     extra['note2'] = _node2.text;
                     extra['autograph_text'] = _autographText.text;
-                    extra['autograph_img'] = 'xxx';
+                    Uint8List? bytes =  await _controller.toPngBytes();
+                    extra['autograph_img'] = base64Encode(bytes!);
                     Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
                   },
                   child: const Text("Save")
@@ -319,23 +345,24 @@ class PageHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Text("Customer"),
-            Text(customerName),
+            Text("Customer ",style: Theme.of(context).textTheme.headline2!,),
+            Text(customerName,style: Theme.of(context).textTheme.headline2!,),
           ],
         ),
+        const SizedBox(height: 12,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                const Text("Plant"),
-                Text(plant),
+                Text("Plant",style:  Theme.of(context).textTheme.headline6!,),
+                Text(plant,style:  Theme.of(context).textTheme.headline6!),
               ],
             ),
             Row(
               children: [
-                const Text("Date"),
-                Text(DateFormat().format(DateTime.now())),
+                Text("Date", style:Theme.of(context).textTheme.headline6!),
+                Text(DateFormat().format(DateTime.now()), style:Theme.of(context).textTheme.headline6!),
               ],
             ),
           ],

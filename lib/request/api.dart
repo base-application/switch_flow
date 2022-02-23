@@ -56,8 +56,18 @@ class Api {
 
   static Future<bool?> performanceSubmit(BuildContext context,List<PerformanceForm> performance,int cid,Map<String,dynamic> extra,String plant) async{
     Map<String,dynamic> params = {"json":performance,"cid":cid,"extra":extra,"plant":plant};
-    developer.log(jsonEncode(params), name: 'my.other.category');
+    developer.log(jsonEncode(params), name: 'api.params');
     ResponseModel response = await Request(context).post("/performance/submit",data:params);
+    return response.code ==1;
+  }
+
+  static Future<bool?> preventiveSubmit(BuildContext context,PreventiveForm preventive,int cid,Map<String,dynamic> extra,String plant) async{
+    Map<String,dynamic> params = preventive.toJson();
+    params['cid'] = cid;
+    params['extra'] = extra;
+    params['plant'] = plant;
+    developer.log(jsonEncode(params), name: 'api.params');
+    ResponseModel response = await Request(context).post("/preventive/submit",data:params);
     return response.code ==1;
   }
 }

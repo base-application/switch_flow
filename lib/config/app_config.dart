@@ -16,6 +16,73 @@ class AppConfig{
   static FloatingActionButtonLocation floatingActionButtonLocation = FloatingActionButtonLocation.centerDocked;
   static Widget firstPage = const Login();
 
+  static ThemeData themeData = ThemeData(
+    textTheme: const TextTheme(
+      headline1: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
+      headline2: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),
+      headline3: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),
+      headline4: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+      headline5: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+      headline6: TextStyle(fontSize: 16,),
+      bodyText1: TextStyle(fontSize: 14,),
+      bodyText2: TextStyle(fontSize: 14,),
+      subtitle1: TextStyle(fontSize: 12),
+      subtitle2: TextStyle(fontSize: 12),
+      caption: TextStyle(fontSize: 10),
+      button: TextStyle(fontSize: 14),
+      overline: TextStyle(fontSize: 30),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        shadowColor: MaterialStateProperty.resolveWith((states) {
+          return Color(0xffDAE5EE);
+        }),
+        backgroundColor: MaterialStateProperty.resolveWith((states) {
+          if(states.contains(MaterialState.disabled)){
+            return Color(0xffEFEFEF);
+          }else{
+            return Color(0xffFF844B);
+          }
+        }),
+        foregroundColor: MaterialStateProperty.resolveWith((states) {
+          if(states.contains(MaterialState.disabled)){
+            return Color(0xff999999);
+          }else{
+            return Colors.white;
+          }
+        }),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50))),
+      ),
+    ),
+    inputDecorationTheme:InputDecorationTheme(
+        hintStyle: TextStyle(
+            fontSize: 14,
+            fontFamily: "PingFang-SC",
+            color: Color(0xff999999),
+            fontWeight: FontWeight.normal),
+        contentPadding: EdgeInsets.only(left: 16,right: 16),
+        fillColor: Color(0xffF1F6FC),
+        filled: true,
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.transparent)
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Color(0xffFF844B))
+        ),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.transparent)
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.transparent)
+        ),
+)
+  );
+
 
   static const String operate0 = "0";	//展示
   static const String operate1 = "1";	//输入

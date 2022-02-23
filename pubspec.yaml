@@ -47,6 +47,7 @@ dependencies:
 
   flutter_easyloading: ^3.0.3
   dropdown_search: ^2.0.1
+  signature: ^5.0.0
 
 dependency_overrides:
   #防止熄屏

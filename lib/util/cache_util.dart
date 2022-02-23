@@ -1,7 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum CacheKey{
-  auth
+  auth,
+  preventive,
 }
 
 class CacheUtil{
@@ -10,7 +11,7 @@ class CacheUtil{
     _preferences = await SharedPreferences.getInstance();
   }
 
-  static void save(key, value){
+  static void save(key, String value){
     _preferences?.setString(key, value) ?? '';
   }
   static String get(key){

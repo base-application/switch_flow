@@ -1,11 +1,14 @@
+
 import 'package:base_app/config/app_config.dart';
 import 'package:base_app/config/input_formtter.dart';
 import 'package:base_app/model/index_entity.dart';
 import 'package:base_app/model/performance_form.dart';
+import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/request/api.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'commen.dart';
 
@@ -22,6 +25,12 @@ class Performance extends StatefulWidget {
 
 class _PerformanceState extends State<Performance> {
   late Future<List<PerformanceForm>?> _performanceForm;
+
+  final TextEditingController _node1 = TextEditingController();
+  final TextEditingController _node2 = TextEditingController();
+  String? _autographImg;
+  final TextEditingController _autographText = TextEditingController();
+  Map<String,dynamic> extra = {};
 
   @override
   void initState() {
@@ -61,6 +70,7 @@ class _PerformanceState extends State<Performance> {
               ...snapshot.data!.map((e) => Container(
                             margin: const EdgeInsets.only(top: 20,),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                     Text(e.content!.first! + "." + e.content!.title!),
                                     const SizedBox(height: 10,),
@@ -97,9 +107,90 @@ class _PerformanceState extends State<Performance> {
 
                             ),
                           )).toList(),
-              const Text("Performance Monitoring Done By :"),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Performance Monitoring Comment:"),
+                  const Text("if case"),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.background,
+                      borderRadius: BorderRadius.circular(22)
+                    ),
+                    child: Row(
+                      children: [
+                        const Text("note"),
+                        Expanded(
+                          child: TextFormField(
+                            maxLines: 5,
+                            minLines: 3,
+                            controller: _node1,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Costomer additional comments (if any):"),
+                  const Text("if case"),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background,
+                        borderRadius: BorderRadius.circular(22)
+                    ),
+                    child: Row(
+                      children: [
+                        const Text("note"),
+                        Expanded(
+                          child: TextFormField(
+                            maxLines: 5,
+                            minLines: 3,
+                            controller: _node2,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  const Text("Performance Monitoring Done By :"),
+                  Text(Provider.of<AuthProvider>(context,listen: false).authUserEntity.name??"")
+                ],
+              ),
               const Text("Customer Acknowledge:"),
-              const Text("签名")
+              const Text("签名"),
+              Row(
+                children: [
+                  const Text("Acknowledged by :"),
+                  Expanded(
+                      child: TextFormField( controller: _autographText,)
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  const Text("Date"),
+                  Text(DateFormat().format(DateTime.now())),
+                ],
+              ),
+              ElevatedButton(
+                  onPressed: (){
+                    extra['note1'] = _node1.text;
+                    extra['note2'] = _node2.text;
+                    extra['autograph_text'] = _autographText.text;
+                    extra['autograph_img'] = 'xxx';
+                    Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
+                  },
+                  child: const Text("Save")
+              )
             ],
           ),
         );
@@ -111,7 +202,11 @@ class _PerformanceState extends State<Performance> {
     if(c.operate == AppConfig.operate0){
       return Text(c.value??"");
     }if(c.operate == AppConfig.operate1){
-      return Text(c.value??"");
+      return TextFormField(
+        onChanged: (v){
+          c.value = v;
+        },
+      );
     }if(c.operate == AppConfig.operate2){
       return SizedBox(
         height: 40,
@@ -140,7 +235,7 @@ class _PerformanceState extends State<Performance> {
             }
           });
         },
-        child: Text(c.value ?? "Choose Date"),
+        child: Text(c.value ==null || c.value!.isEmpty ?  "Choose Date" :c.value!),
       );
     }
     if(c.operate == AppConfig.operate4){
@@ -174,6 +269,9 @@ class _PerformanceState extends State<Performance> {
         inputFormatters: [
           XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 1,isAllowDecimal: true),],
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onChanged: (v){
+          c.value = v;
+        },
       );
     }
     if(c.operate == AppConfig.operate7){

@@ -1,5 +1,15 @@
 import 'package:flutter/services.dart';
 
+///输入内容不能解析成double
+bool isToDoubleError(String value) {
+  try {
+    double.parse(value);
+  } catch (e) {
+    return true;
+  }
+  return false;
+}
+
 class XNumberTextInputFormatter extends TextInputFormatter {
   final int? _maxIntegerLength;
   final int? _maxDecimalLength;
@@ -23,7 +33,7 @@ class XNumberTextInputFormatter extends TextInputFormatter {
       if (value == '.') {
         value = '0.';
         selectionIndex++;
-      } else if (value != '' && _isToDoubleError(value)) {
+      } else if (value != '' && isToDoubleError(value)) {
         //不是double输入数据
         return _oldTextEditingValue(oldValue);
       }
@@ -62,7 +72,7 @@ class XNumberTextInputFormatter extends TextInputFormatter {
       }
     } else {
       if (value.contains('.') ||
-          (value != '' && _isToDoubleError(value)) ||
+          (value != '' && isToDoubleError(value)) ||
           (null!=_maxIntegerLength&&value.length > _maxIntegerLength!)) {
         return _oldTextEditingValue(oldValue);
       }
@@ -82,13 +92,24 @@ class XNumberTextInputFormatter extends TextInputFormatter {
     );
   }
 
-  ///输入内容不能解析成double
-  bool _isToDoubleError(String value) {
-    try {
-      double.parse(value);
-    } catch (e) {
-      return true;
+
+}
+
+
+class MaxMinTextInputFormatter extends TextInputFormatter {
+  final double max;
+  final double min;
+
+  MaxMinTextInputFormatter(this.max, this.min);
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue,
+      TextEditingValue newValue) {
+    if (isToDoubleError(newValue.text)) return oldValue;
+
+    if (double.parse(newValue.text) > max || double.parse(newValue.text) < min) {
+      return oldValue;
     }
-    return false;
+    return newValue;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:base_app/model/auth_user_entity.dart';
 import 'package:base_app/model/company_entity.dart';
 import 'package:base_app/model/index_entity.dart';
@@ -8,7 +10,10 @@ import 'package:base_app/util/request.dart';
 import 'package:base_app/util/request_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'dart:developer' as developer;
+
 
 class Api {
   static Future<bool> login(BuildContext context,String username,String password) async{
@@ -47,5 +52,12 @@ class Api {
     ResponseModel response = await Request(context).post("/preventive/index",data: FormData.fromMap({"cid":cid}));
     if(response.code !=1) return null;
     return PreventiveForm.fromJson(response.data);
+  }
+
+  static Future<bool?> performanceSubmit(BuildContext context,List<PerformanceForm> performance,int cid,Map<String,dynamic> extra,String plant) async{
+    Map<String,dynamic> params = {"json":performance,"cid":cid,"extra":extra,"plant":plant};
+    developer.log(jsonEncode(params), name: 'my.other.category');
+    ResponseModel response = await Request(context).post("/performance/submit",data:params);
+    return response.code ==1;
   }
 }

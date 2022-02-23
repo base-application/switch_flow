@@ -7,9 +7,7 @@ import 'package:base_app/page/commen.dart';
 import 'package:base_app/page/performance.dart';
 import 'package:base_app/request/api.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide Step;
-import 'package:intl/intl.dart';
 
 class Preventive extends StatefulWidget {
   final IndexSelect indexSelect;
@@ -179,94 +177,93 @@ class _PreventiveState extends State<Preventive> {
   }
 
   Widget _switchOperate(Child c){
-    if(c.operate == AppConfig.operate0){
+    if(c.operate == AppConfig.preOperate0){
       return Text(c.value??"");
-    }if(c.operate == AppConfig.operate1){
-      return Text(c.value??"");
-    }if(c.operate == AppConfig.operate2){
-      return SizedBox(
-        height: 40,
-        child: DropdownSearch<String>(
-            mode: Mode.MENU,
-            showSelectedItems: true,
-            items:const ["Yes","No"],
-            onChanged: (v){
-              c.value = v;
-            }
-        ),
-      );
-    }
-    if(c.operate == AppConfig.operate3){
-      return  GestureDetector(
-        onTap: (){
-          showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now()
-          ).then((value) {
-            if(value!=null){
-              c.value = DateFormat().format(value);
-              setState(() {});
-            }
-          });
-        },
-        child: Text(c.value ?? "Choose Date"),
-      );
-    }
-    if(c.operate == AppConfig.operate4){
-      return SizedBox(
-        height: 40,
-        child: DropdownSearch<String>(
-            mode: Mode.MENU,
-            showSelectedItems: true,
-            items:const ["Done","Not Done"],
-            onChanged: (v){
-              c.value = v;
-            }
-        ),
-      );
-    }
-    if(c.operate == AppConfig.operate5){
-      return SizedBox(
-        height: 40,
-        child: DropdownSearch<String>(
-            mode: Mode.MENU,
-            showSelectedItems: true,
-            items:const ["Clear","Turbid"],
-            onChanged: (v){
-              c.value = v;
-            }
-        ),
-      );
-    }
-    if(c.operate == AppConfig.operate6){
+    }if(c.operate == AppConfig.preOperate1){
       return TextFormField(
-        inputFormatters: [XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 1,isAllowDecimal: true),],
+        onChanged: (v){
+          c.value = v;
+        },
+      );
+    }if(c.operate == AppConfig.preOperate2){
+      return TextFormField(
+        inputFormatters: [
+          XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 1,isAllowDecimal: true),],
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onChanged: (v){
+          c.value = v;
+        },
       );
     }
-    if(c.operate == AppConfig.operate7){
-      SizedBox(
+    if(c.operate == AppConfig.preOperate3){
+      return  SizedBox(
         height: 40,
         child: DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItems: true,
-            items:const ["Clean","Dirty"],
+            items:const ["Poor condition","Good condition","No equipment at side"],
             onChanged: (v){
               c.value = v;
             }
         ),
       );
     }
-    if(c.operate == AppConfig.operate8){}
+    if(c.operate == AppConfig.preOperate4){
+      return SizedBox(
+        height: 40,
+        child: DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            items:const ["To be improve","Acceptable"],
+            onChanged: (v){
+              c.value = v;
+            }
+        ),
+      );
+    }
+    if(c.operate == AppConfig.preOperate5){
+      return TextFormField(
+        inputFormatters: [
+          XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 2,isAllowDecimal: true),],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onChanged: (v){
+          c.value = v;
+        },
+      );
+    }
+    if(c.operate == AppConfig.preOperate6){
+      return SizedBox(
+        height: 40,
+        child: DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            items:const ["Have white buble","Don’t have white bubble"],
+            onChanged: (v){
+              c.value = v;
+            }
+        ),
+      );
+    }
+    if(c.operate == AppConfig.preOperate7){
+      return TextFormField(
+        inputFormatters: [
+          XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 2,isAllowDecimal: true),
+          MaxMinTextInputFormatter(14.00,0.00)
+        ],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onChanged: (v){
+          c.value = v;
+        },
+      );
+    }
+    if(c.operate == AppConfig.preOperate8){}
     else{
       return  SizedBox(
         height: 40,
         child: DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItems: true,
-            items:const ["Acceptable","To be improve"],
+            items:const ["Bad condition","Good condition","Unable to calibrate","No pH probe onsite"],
             onChanged: (v){
               c.value = v;
             }

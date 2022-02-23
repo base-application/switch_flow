@@ -27,6 +27,17 @@ class AppConfig{
   static const String operate7 = "7";	//选择: Clean / Dirty
   static const String operate8 = "8";	//选择: Acceptable / To be improve
 
+  static const String  preOperate0 = "0";	//展示
+  static const String  preOperate1 = "1";	//输入
+  static const String  preOperate2 = "2";	//	输入 (限制1个小数点)
+  static const String  preOperate3 = "3";	//选择： Poor condition / Good condition / No equipment at side
+  static const String  preOperate4 = "4";	//选择： To be improve / Acceptable
+  static const String  preOperate5 = "5";	//输入 (限制2个小数点) 此类型需要演算法运作
+  static const String  preOperate6 = "6";	//选择： Have white buble / Don’t have white bubble
+  static const String  preOperate7 = "7";	//输入 (所输入的价值必须在0.00 - 14.00之间)
+  static const String  preOperate8 = "8";	//选择： Bad condition / Good condition / Unable to calibrate / No pH probe onsite
+
+
 
   static const String type1 = "1";//	Setting range Actual reading Within setting range
   static const String type2 = "2";//	Within setting range

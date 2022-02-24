@@ -15,8 +15,9 @@ class AppConfig{
   static bool showFloatingActionButton = false;
   static FloatingActionButtonLocation floatingActionButtonLocation = FloatingActionButtonLocation.centerDocked;
   static Widget firstPage = const Login();
-
+  static GlobalKey<NavigatorState> navigatorKey=GlobalKey();
   static ThemeData themeData = ThemeData(
+    scaffoldBackgroundColor: Colors.white,
     textTheme: const TextTheme(
       headline1: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
       headline2: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),
@@ -26,7 +27,7 @@ class AppConfig{
       headline6: TextStyle(fontSize: 16,),
       bodyText1: TextStyle(fontSize: 14,),
       bodyText2: TextStyle(fontSize: 14,),
-      subtitle1: TextStyle(fontSize: 12),
+      subtitle1: TextStyle(fontSize: 14),
       subtitle2: TextStyle(fontSize: 12),
       caption: TextStyle(fontSize: 10),
       button: TextStyle(fontSize: 14),
@@ -34,53 +35,32 @@ class AppConfig{
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        shadowColor: MaterialStateProperty.resolveWith((states) {
-          return const Color(0xffDAE5EE);
-        }),
-        backgroundColor: MaterialStateProperty.resolveWith((states) {
-          if(states.contains(MaterialState.disabled)){
-            return const Color(0xffEFEFEF);
-          }else{
-            return const Color(0xffFF844B);
-          }
-        }),
-        foregroundColor: MaterialStateProperty.resolveWith((states) {
-          if(states.contains(MaterialState.disabled)){
-            return const Color(0xff999999);
-          }else{
-            return Colors.white;
-          }
-        }),
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50))),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
       ),
     ),
     inputDecorationTheme:InputDecorationTheme(
         hintStyle: const TextStyle(
-            fontSize: 14,
-            fontFamily: "PingFang-SC",
-            color: Color(0xff999999),
+            fontSize: 16,
             fontWeight: FontWeight.normal),
         contentPadding: const EdgeInsets.only(left: 16,right: 16),
-        fillColor: const Color(0xffF1F6FC),
-        filled: true,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.transparent)
         ),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xffFF844B))
         ),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.transparent)
         ),
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.transparent)
         ),
-)
+),
+    appBarTheme: const AppBarTheme(
+      centerTitle: true,
+      backgroundColor: Colors.white,
+      elevation: 0
+    ),
   );
 
 

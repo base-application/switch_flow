@@ -21,7 +21,7 @@ class AuthProvider extends ChangeNotifier{
 
   set authUserEntity(AuthUserEntity value) {
     _authUserEntity = value;
-//    CacheUtil.save(CacheKey.auth.name, jsonEncode(value));
+   CacheUtil.save(CacheKey.auth.name, jsonEncode(value));
     notifyListeners();
   }
 }

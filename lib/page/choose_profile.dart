@@ -6,6 +6,7 @@ import 'package:base_app/page/commen.dart';
 import 'package:base_app/page/top_company.dart';
 import 'package:base_app/request/api.dart';
 import 'package:base_app/router/app_router.gr.dart';
+import 'package:base_app/util/cache_util.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -54,55 +55,73 @@ class _ChooseProfileState extends State<ChooseProfile> {
                   TopCompany(company: company,),
 
                   const Divider(),
-                  const Text("Preventive Maintenance & Performance Monitoring"),
+                  Text("Preventive Maintenance & Performance Monitoring",style: Theme.of(context).textTheme.headline6!,),
+                  const SizedBox(height: 12,),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.black12,
+                      color: Theme.of(context).colorScheme.background,
                       borderRadius: BorderRadius.circular(12)
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("name"),
-                        const Text("NAME"),
-                        const Text("Customer"),
-                        DropdownSearch<IndexSelect>(
-                            mode: Mode.MENU,
-                            showSelectedItems: false,
-                            items: company.indexSelect!.map((e) => e).toList(),
-                            itemAsString: (e) => e!.name??'',
-                            onChanged: (v){
-                              if(v?.id != _indexSelect?.id){
-                                _indexSelect = v;
-                                _categories = v?.category??[];
-                                _plants = v?.plant??[];
-                                _plantKey.currentState?.clear();
-                                _categoryKey.currentState?.clear();
-                                setState(() {});
+                        // const Text("name"),
+                        // const Text("NAME"),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Text("Customer",style: Theme.of(context).textTheme.headline6),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: DropdownSearch<IndexSelect>(
+                              mode: Mode.MENU,
+                              showSelectedItems: false,
+                              items: company.indexSelect!.map((e) => e).toList(),
+                              itemAsString: (e) => e!.name??'',
+                              onChanged: (v){
+                                if(v?.id != _indexSelect?.id){
+                                  _indexSelect = v;
+                                  _categories = v?.category??[];
+                                  _plants = v?.plant??[];
+                                  _plantKey.currentState?.clear();
+                                  _categoryKey.currentState?.clear();
+                                  setState(() {});
+                                }
                               }
-                            }
+                          ),
                         ),
-                        const Text("Type Of Check List"),
-                        DropdownSearch<String>(
-                            key: _categoryKey,
-                            mode: Mode.MENU,
-                            showSelectedItems: true,
-                            items: _categories?.map((e) => e).toList()??[],
-                            onChanged: (v){
-                              _category = v;
-                            }
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12,top: 12),
+                          child: Text("Type Of Check List",style: Theme.of(context).textTheme.headline6),),
+                        SizedBox(
+                          height: 50,
+                          child: DropdownSearch<String>(
+                              key: _categoryKey,
+                              mode: Mode.MENU,
+                              showSelectedItems: true,
+                              items: _categories?.map((e) => e).toList()??[],
+                              onChanged: (v){
+                                _category = v;
+                              }
+                          ),
                         ),
-                        const Text("Plant"),
-                        DropdownSearch<String>(
-                            key: _plantKey,
-                            mode: Mode.MENU,
-                            showSelectedItems: true,
-                            items: _plants?.map((e) => e).toList()??[],
-                            onChanged: (v){
-                              _plant = v;
-                            }
-                        ),
+                        const SizedBox(height: 12,),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12,top: 12),
+                          child: Text("Plant",style: Theme.of(context).textTheme.headline6,),),
+                       SizedBox(
+                         height: 50,
+                         child:  DropdownSearch<String>(
+                             key: _plantKey,
+                             mode: Mode.MENU,
+                             showSelectedItems: true,
+                             items: _plants?.map((e) => e).toList()??[],
+                             onChanged: (v){
+                               _plant = v;
+                             }
+                         ),
+                       )
                       ],
                     ),
                   ),
@@ -117,7 +136,14 @@ class _ChooseProfileState extends State<ChooseProfile> {
                       },
                       child: const Text("ENTER")
                   ),
-                  Text(DateFormat().format(DateTime.now()))
+                  Text(DateFormat().format(DateTime.now())),
+                  ElevatedButton(
+                      onPressed: (){
+                        CacheUtil.clear();
+                        AutoRouter.of(context).replaceAll([ const LoginRoute()]);
+                      },
+                      child: const Text("Login Out")
+                  )
                 ],
               ),
             ),

@@ -5,13 +5,14 @@ import 'package:base_app/page/performance.dart';
 import 'package:base_app/page/preventive.dart';
 import 'package:base_app/user/login.dart';
 
-//flutter packages pub run build_runner build
+import 'auth_guard.dart';
+
 @MaterialAutoRouter(
   routes: <AutoRoute>[
-    AutoRoute(page: Login, initial: true),
+    AutoRoute(page: Login),
     AutoRoute(page: ChooseProfile),
-    AutoRoute(page: Preventive),
-    AutoRoute(page: Performance),
+    AutoRoute(page: Preventive,guards: [AuthGuard],),
+    AutoRoute(page: Performance,guards: [AuthGuard],),
   ],
 )
 class $AppRouter {}

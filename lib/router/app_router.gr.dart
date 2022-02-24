@@ -13,15 +13,20 @@
 import 'package:auto_route/auto_route.dart' as _i5;
 import 'package:flutter/material.dart' as _i6;
 
-import '../model/index_entity.dart' as _i7;
+import '../model/index_entity.dart' as _i8;
 import '../page/choose_profile.dart' as _i2;
 import '../page/performance.dart' as _i4;
 import '../page/preventive.dart' as _i3;
 import '../user/login.dart' as _i1;
+import 'auth_guard.dart' as _i7;
 
 class AppRouter extends _i5.RootStackRouter {
-  AppRouter([_i6.GlobalKey<_i6.NavigatorState>? navigatorKey])
+  AppRouter(
+      {_i6.GlobalKey<_i6.NavigatorState>? navigatorKey,
+      required this.authGuard})
       : super(navigatorKey);
+
+  final _i7.AuthGuard authGuard;
 
   @override
   final Map<String, _i5.PageFactory> pagesMap = {
@@ -51,17 +56,19 @@ class AppRouter extends _i5.RootStackRouter {
 
   @override
   List<_i5.RouteConfig> get routes => [
-        _i5.RouteConfig(LoginRoute.name, path: '/'),
+        _i5.RouteConfig(LoginRoute.name, path: '/Login'),
         _i5.RouteConfig(ChooseProfileRoute.name, path: '/choose-profile'),
-        _i5.RouteConfig(PreventiveRoute.name, path: '/Preventive'),
-        _i5.RouteConfig(PerformanceRoute.name, path: '/Performance')
+        _i5.RouteConfig(PreventiveRoute.name,
+            path: '/Preventive', guards: [authGuard]),
+        _i5.RouteConfig(PerformanceRoute.name,
+            path: '/Performance', guards: [authGuard])
       ];
 }
 
 /// generated route for
 /// [_i1.Login]
 class LoginRoute extends _i5.PageRouteInfo<void> {
-  const LoginRoute() : super(LoginRoute.name, path: '/');
+  const LoginRoute() : super(LoginRoute.name, path: '/Login');
 
   static const String name = 'LoginRoute';
 }
@@ -80,7 +87,7 @@ class ChooseProfileRoute extends _i5.PageRouteInfo<void> {
 class PreventiveRoute extends _i5.PageRouteInfo<PreventiveRouteArgs> {
   PreventiveRoute(
       {_i6.Key? key,
-      required _i7.IndexSelect indexSelect,
+      required _i8.IndexSelect indexSelect,
       required String plant})
       : super(PreventiveRoute.name,
             path: '/Preventive',
@@ -96,7 +103,7 @@ class PreventiveRouteArgs {
 
   final _i6.Key? key;
 
-  final _i7.IndexSelect indexSelect;
+  final _i8.IndexSelect indexSelect;
 
   final String plant;
 
@@ -111,7 +118,7 @@ class PreventiveRouteArgs {
 class PerformanceRoute extends _i5.PageRouteInfo<PerformanceRouteArgs> {
   PerformanceRoute(
       {_i6.Key? key,
-      required _i7.IndexSelect indexSelect,
+      required _i8.IndexSelect indexSelect,
       required String plant})
       : super(PerformanceRoute.name,
             path: '/Performance',
@@ -127,7 +134,7 @@ class PerformanceRouteArgs {
 
   final _i6.Key? key;
 
-  final _i7.IndexSelect indexSelect;
+  final _i8.IndexSelect indexSelect;
 
   final String plant;
 

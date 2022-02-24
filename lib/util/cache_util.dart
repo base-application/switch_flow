@@ -17,5 +17,8 @@ class CacheUtil{
   static String get(key){
     return _preferences?.getString(key) ?? '';
   }
+  static clear(){
+    _preferences?.clear();
+  }
 
 }

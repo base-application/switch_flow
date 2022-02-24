@@ -10,6 +10,7 @@ import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/request/api.dart';
 import 'package:base_app/util/request.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -116,11 +117,13 @@ class _PerformanceState extends State<Performance> {
 
                             ),
                           )).toList(),
+              const SizedBox(height: 10,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Performance Monitoring Comment:"),
                   const Text("if case"),
+                  const SizedBox(height: 10,),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -129,9 +132,15 @@ class _PerformanceState extends State<Performance> {
                     ),
                     child: Row(
                       children: [
-                        const Text("note"),
+                        const SizedBox(
+                          width: 100,
+                          child:   Text("note"),
+                        ),
                         Expanded(
                           child: TextFormField(
+                            decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.all(10)
+                            ),
                             maxLines: 5,
                             minLines: 3,
                             controller: _node1,
@@ -142,11 +151,13 @@ class _PerformanceState extends State<Performance> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Costomer additional comments (if any):"),
                   const Text("if case"),
+                  const SizedBox(height: 10,),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -155,9 +166,15 @@ class _PerformanceState extends State<Performance> {
                     ),
                     child: Row(
                       children: [
-                        const Text("note"),
+                        const SizedBox(
+                          width: 100,
+                          child:   Text("note"),
+                        ),
                         Expanded(
                           child: TextFormField(
+                            decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.all(10)
+                            ),
                             maxLines: 5,
                             minLines: 3,
                             controller: _node2,
@@ -168,12 +185,14 @@ class _PerformanceState extends State<Performance> {
                   )
                 ],
               ),
+              const SizedBox(height: 10,),
               Row(
                 children: [
                   const Text("Performance Monitoring Done By :"),
                   Text(Provider.of<AuthProvider>(context,listen: false).authUserEntity.name??"")
                 ],
               ),
+              const SizedBox(height: 10,),
               const Text("Customer Acknowledge:"),
               Row(
                 children: [
@@ -187,6 +206,7 @@ class _PerformanceState extends State<Performance> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10,),
               Row(
                 children: [
                   const Text("Acknowledged by :"),
@@ -195,34 +215,40 @@ class _PerformanceState extends State<Performance> {
                   )
                 ],
               ),
+              const SizedBox(height: 10,),
               Row(
                 children: [
                   const Text("Date"),
                   Text(DateFormat().format(DateTime.now())),
                 ],
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    if(_controller.isEmpty){
-                      Request.toast("sing");
-                      return;
-                    }
-                    for (var per in snapshot.data!) {
-                      bool isEmpty = per.content?.child?.any((element) => element.operate !=AppConfig.operate0 &&  (element.value ==null || element.value!.isEmpty))??false;
-                      if(isEmpty ){
-                        Logger().i( per.content!.title! + "is empty");
-                        Request.toast( per.content!.title!  + "is empty");
+              const SizedBox(height: 10,),
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                    onPressed: () async {
+                      if(_controller.isEmpty){
+                        Request.toast("sing");
                         return;
                       }
-                    }
-                    extra['note1'] = _node1.text;
-                    extra['note2'] = _node2.text;
-                    extra['autograph_text'] = _autographText.text;
-                    Uint8List? bytes =  await _controller.toPngBytes();
-                    extra['autograph_img'] = base64Encode(bytes!);
-                    Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
-                  },
-                  child: const Text("Save")
+                      for (var per in snapshot.data!) {
+                        bool isEmpty = per.content?.child?.any((element) => element.operate !=AppConfig.operate0 &&  (element.value ==null || element.value!.isEmpty))??false;
+                        if(isEmpty ){
+                          Logger().i( per.content!.title! + "is empty");
+                          Request.toast( per.content!.title!  + "is empty");
+                          return;
+                        }
+                      }
+                      extra['note1'] = _node1.text;
+                      extra['note2'] = _node2.text;
+                      extra['autograph_text'] = _autographText.text;
+                      Uint8List? bytes =  await _controller.toPngBytes();
+                      extra['autograph_img'] = base64Encode(bytes!);
+                      Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
+                    },
+                    child: const Text("Save")
+                ),
               )
             ],
           ),

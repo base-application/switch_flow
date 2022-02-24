@@ -18,18 +18,18 @@ class _TopCompanyState extends State<TopCompany> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(widget.company.title??""),
-          Text(widget.company.address??""),
+          Text(widget.company.title??"",style: Theme.of(context).textTheme.headline4,),
+          Text(widget.company.address??"",style: Theme.of(context).textTheme.headline6),
           Row(
             children: [
-              Text(widget.company.phone??""),
-              Text(widget.company.fax??""),
+              Text(widget.company.phone??"",style: Theme.of(context).textTheme.bodyText1),
+              Text(widget.company.fax??"",style: Theme.of(context).textTheme.bodyText1),
             ],
           ),
           Row(
             children: [
-              Text(widget.company.email??""),
-              Text(widget.company.site??""),
+              Text(widget.company.email??"",style: Theme.of(context).textTheme.bodyText1),
+              Text(widget.company.site??"",style: Theme.of(context).textTheme.bodyText1),
             ],
           )
         ],

@@ -30,6 +30,9 @@ class _LoginState extends State<Login> {
                 onSaved: (v){
                   username = v;
                 },
+                decoration: const InputDecoration(
+                  hintText: "userName"
+                ),
                 validator: (v){
                   if(v==null || v.isEmpty){
                     return "is not empty";
@@ -38,9 +41,13 @@ class _LoginState extends State<Login> {
               ),
               const SizedBox(height: 12,),
               TextFormField(
+                obscureText: true,
                 onSaved: (v){
                   password = v;
                 },
+                decoration: const InputDecoration(
+                    hintText: "password",
+                ),
                 validator: (v){
                   if(v==null || v.isEmpty){
                     return "is not empty";
@@ -55,7 +62,7 @@ class _LoginState extends State<Login> {
                     _formKey.currentState?.save();
                     Api.login(context,username!,password!).then((value) {
                       if(value){
-                        AutoRouter.of(context).push(const ChooseProfileRoute());
+                        AutoRouter.of(context).replaceAll([ const ChooseProfileRoute()]);
                       }
                     });
                   }

@@ -1,5 +1,6 @@
 import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/router/app_router.gr.dart';
+import 'package:base_app/router/auth_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,16 +22,19 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
   MyApp({Key? key}) : super(key: key);
-
+  final _appRouter = AppRouter(navigatorKey: AppConfig.navigatorKey,authGuard: AuthGuard());
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    String? token = Provider.of<AuthProvider>(context,listen: false).authUserEntity.token;
+
     return MaterialApp.router(
       title: AppConfig.title,
       theme: AppConfig.themeData,
-      routerDelegate: _appRouter.delegate(),
+      routerDelegate: _appRouter.delegate(
+        initialRoutes: token == null ? [const LoginRoute()] : [const ChooseProfileRoute()]
+      ),
       routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }

@@ -34,7 +34,7 @@ class PerformanceForm {
     if (content != null) {
       data['content'] = content!.toJson();
     }
-    data['category'] = category;
+    data['category'] = category??"";
     data['create_time'] = createTime;
     data['step'] = step;
     data['type'] = type;
@@ -68,11 +68,11 @@ class Content {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['title'] = title;
-    data['first'] = first;
-    data['second'] = second;
-    data['machine'] = machine;
-    data['location'] = location;
+    data['title'] = title??"";
+    data['first'] = first??"";
+    data['second'] = second??"";
+    data['machine'] = machine??"";
+    data['location'] = location??"";
     if (child != null) {
       data['child'] = child!.map((v) => v.toJson()).toList();
     }
@@ -97,10 +97,10 @@ class Child {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['operate'] = operate;
-    data['value'] = value;
-    data['letter'] = letter;
-    data['lable'] = lable;
+    data['operate'] = operate??"";
+    data['value'] = value??"";
+    data['letter'] = letter??"";
+    data['lable'] = lable??"";
     return data;
   }
 }

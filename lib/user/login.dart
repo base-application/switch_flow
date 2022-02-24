@@ -36,6 +36,7 @@ class _LoginState extends State<Login> {
                   }
                 },
               ),
+              const SizedBox(height: 12,),
               TextFormField(
                 onSaved: (v){
                   password = v;

@@ -10,7 +10,6 @@ import 'package:base_app/util/request.dart';
 import 'package:base_app/util/request_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer;
 
@@ -55,19 +54,24 @@ class Api {
   }
 
   static Future<bool?> performanceSubmit(BuildContext context,List<PerformanceForm> performance,int cid,Map<String,dynamic> extra,String plant) async{
-    Map<String,dynamic> params = {"json":performance,"cid":cid,"extra":extra,"plant":plant};
+    Map<String,dynamic> params = {"json":jsonEncode(performance),"cid":cid,"extra":jsonEncode(extra),"plant":plant};
     developer.log(jsonEncode(params), name: 'api.params');
-    ResponseModel response = await Request(context).post("/performance/submit",data:params);
+    ResponseModel response = await Request(context).post("/performance/submit",data: FormData.fromMap(params));
     return response.code ==1;
   }
 
   static Future<bool?> preventiveSubmit(BuildContext context,PreventiveForm preventive,int cid,Map<String,dynamic> extra,String plant) async{
-    Map<String,dynamic> params = preventive.toJson();
+    Map<String,dynamic> params = {};
     params['cid'] = cid;
-    params['extra'] = extra;
+    params['extra'] = jsonEncode(extra);
     params['plant'] = plant;
+    params['step1'] = jsonEncode(preventive.step1);
+    params['step2'] = jsonEncode(preventive.step2);
+    params['step3'] = jsonEncode(preventive.step3);
+    params['step4'] = jsonEncode(preventive.step4);
+    params['step5'] = jsonEncode(preventive.step5);
     developer.log(jsonEncode(params), name: 'api.params');
-    ResponseModel response = await Request(context).post("/preventive/submit",data:params);
+    ResponseModel response = await Request(context).post("/preventive/submit",data:FormData.fromMap(params));
     return response.code ==1;
   }
 }

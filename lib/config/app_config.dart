@@ -35,18 +35,18 @@ class AppConfig{
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         shadowColor: MaterialStateProperty.resolveWith((states) {
-          return Color(0xffDAE5EE);
+          return const Color(0xffDAE5EE);
         }),
         backgroundColor: MaterialStateProperty.resolveWith((states) {
           if(states.contains(MaterialState.disabled)){
-            return Color(0xffEFEFEF);
+            return const Color(0xffEFEFEF);
           }else{
-            return Color(0xffFF844B);
+            return const Color(0xffFF844B);
           }
         }),
         foregroundColor: MaterialStateProperty.resolveWith((states) {
           if(states.contains(MaterialState.disabled)){
-            return Color(0xff999999);
+            return const Color(0xff999999);
           }else{
             return Colors.white;
           }
@@ -56,29 +56,29 @@ class AppConfig{
       ),
     ),
     inputDecorationTheme:InputDecorationTheme(
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
             fontSize: 14,
             fontFamily: "PingFang-SC",
             color: Color(0xff999999),
             fontWeight: FontWeight.normal),
-        contentPadding: EdgeInsets.only(left: 16,right: 16),
-        fillColor: Color(0xffF1F6FC),
+        contentPadding: const EdgeInsets.only(left: 16,right: 16),
+        fillColor: const Color(0xffF1F6FC),
         filled: true,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.transparent)
+            borderSide: const BorderSide(color: Colors.transparent)
         ),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Color(0xffFF844B))
+            borderSide: const BorderSide(color: Color(0xffFF844B))
         ),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.transparent)
+            borderSide: const BorderSide(color: Colors.transparent)
         ),
         focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.transparent)
+            borderSide: const BorderSide(color: Colors.transparent)
         ),
 )
   );

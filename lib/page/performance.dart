@@ -12,6 +12,7 @@ import 'package:base_app/util/request.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
 
@@ -34,8 +35,6 @@ class _PerformanceState extends State<Performance> {
     penStrokeWidth: 1,
     penColor: Colors.red,
     exportBackgroundColor: Colors.blue,
-    onDrawStart: () => print('onDrawStart called!'),
-    onDrawEnd: () => print('onDrawEnd called!'),
   );
   final TextEditingController _node1 = TextEditingController();
   final TextEditingController _node2 = TextEditingController();
@@ -208,6 +207,14 @@ class _PerformanceState extends State<Performance> {
                       Request.toast("sing");
                       return;
                     }
+                    for (var per in snapshot.data!) {
+                      bool isEmpty = per.content?.child?.any((element) => element.operate !=AppConfig.operate0 &&  (element.value ==null || element.value!.isEmpty))??false;
+                      if(isEmpty ){
+                        Logger().i( per.content!.title! + "is empty");
+                        Request.toast( per.content!.title!  + "is empty");
+                        return;
+                      }
+                    }
                     extra['note1'] = _node1.text;
                     extra['note2'] = _node2.text;
                     extra['autograph_text'] = _autographText.text;
@@ -301,7 +308,7 @@ class _PerformanceState extends State<Performance> {
       );
     }
     if(c.operate == AppConfig.operate7){
-      SizedBox(
+      return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
             mode: Mode.MENU,
@@ -313,8 +320,7 @@ class _PerformanceState extends State<Performance> {
         ),
       );
     }
-    if(c.operate == AppConfig.operate8){}
-    else{
+    if(c.operate == AppConfig.operate8){
       return  SizedBox(
         height: 40,
         child: DropdownSearch<String>(

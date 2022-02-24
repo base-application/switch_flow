@@ -37,8 +37,6 @@ class _PreventiveState extends State<Preventive> {
     penStrokeWidth: 1,
     penColor: Colors.red,
     exportBackgroundColor: Colors.blue,
-    onDrawStart: () => print('onDrawStart called!'),
-    onDrawEnd: () => print('onDrawEnd called!'),
   );
   final TextEditingController _node2 = TextEditingController();
   final TextEditingController _autographText = TextEditingController();
@@ -116,7 +114,7 @@ class _PreventiveState extends State<Preventive> {
                   physics: const NeverScrollableScrollPhysics(),
                   onPageChanged: (i){
                     pageIndex = i;
-                    if(i<lastIndex){
+                    if(i>lastIndex){
                       lastIndex = i;
                     }
                     setState(() {});
@@ -407,7 +405,7 @@ class _PreventiveState extends State<Preventive> {
       extra['autograph_text'] = _autographText.text;
       Uint8List? bytes =  await _signatureController.toPngBytes();
       extra['autograph_img'] = base64Encode(bytes!);
-      extra['autograph_img'] = _signatureController;
+      extra['autograph_img'] = bytes;
       Api.preventiveSubmit(context,preventive,widget.indexSelect.id!,extra,widget.plant);
     }
   }

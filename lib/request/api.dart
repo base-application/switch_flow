@@ -32,11 +32,9 @@ class Api {
   }
 
   static Future<Company?> company(BuildContext context) async{
-    List<IndexSelect> select = await index(context);
     ResponseModel response = await Request(context).get("/user/top");
     if(response.code !=1) return null;
     Company company =  Company.fromJson(response.data);
-    company.indexSelect = select;
     return company;
   }
 

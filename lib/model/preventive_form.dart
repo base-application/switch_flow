@@ -105,6 +105,7 @@ class Content {
   String? num;
   String? desc;
   String? status;
+  bool? fill;
 
   Content({this.num, this.desc, this.status});
 
@@ -112,6 +113,7 @@ class Content {
     num = json['num'];
     desc = json['desc'];
     status = json['status'];
+    fill = json['fill'];
   }
 
   Map<String, dynamic> toJson() {
@@ -119,6 +121,7 @@ class Content {
     data['num'] = num;
     data['desc'] = desc;
     data['status'] = status;
+    data['fill'] = fill;
     return data;
   }
 }

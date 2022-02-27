@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class AppConfig{
   static const  String title = "title";
-  static const  String serverUrl = "http://sf.ligengxin.com/api.php/v1";
+//  static const  String serverUrl = "http://sf.ligengxin.com/api.php/v1";
+  static const  String serverUrl = "http://47.254.213.211/api.php/v1";
   static  List<BottomNavItemModel> bottomNavItem = [
     BottomNavItemModel(title:"nav1",icon: const Icon(Icons.ac_unit)),
     BottomNavItemModel(title:"nav1",icon: const Icon(Icons.ac_unit)),
@@ -36,6 +37,7 @@ class AppConfig{
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
+        minimumSize: MaterialStateProperty.all(const Size.fromHeight(50))
       ),
     ),
     inputDecorationTheme:InputDecorationTheme(
@@ -83,7 +85,8 @@ class AppConfig{
   static const String  preOperate6 = "6";	//选择： Have white buble / Don’t have white bubble
   static const String  preOperate7 = "7";	//输入 (所输入的价值必须在0.00 - 14.00之间)
   static const String  preOperate8 = "8";	//选择： Bad condition / Good condition / Unable to calibrate / No pH probe onsite
-
+  static const String preOperate9 = "9";//	演算法运作： [(calibrated volume/calibration time)*3600]/1000， 2个小数点
+  static const String preOperate10 = "10";//	D [(20/calibration time)*3600]/1000， 2个小数点
 
 
   static const String type1 = "1";//	Setting range Actual reading Within setting range
@@ -94,6 +97,8 @@ class AppConfig{
   static const String type6 = "6";//	Clean / Dirty selection
   static const String type7 = "7";//	Acceptable / To be improve selection
   static const String type8 = "8";//	Done / Not done selection
+  static const String type9 = "9";//	演算法运作： [(calibrated volume/calibration time)*3600]/1000， 2个小数点
+  static const String type10 = "10";//	D [(20/calibration time)*3600]/1000， 2个小数点
 }
 
 enum Category{

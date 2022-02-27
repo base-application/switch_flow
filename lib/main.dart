@@ -1,4 +1,5 @@
 import 'package:base_app/privider/auth_provider.dart';
+import 'package:base_app/privider/company_provider.dart';
 import 'package:base_app/router/app_router.gr.dart';
 import 'package:base_app/router/auth_guard.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ void main() {
     runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (BuildContext context) => AuthProvider()),
+        ChangeNotifierProvider<CompanyProvider>(create: (BuildContext context) => CompanyProvider()),
       ],
       child: MyApp(),
     ));

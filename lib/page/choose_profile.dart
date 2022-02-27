@@ -19,7 +19,7 @@ class ChooseProfile extends StatefulWidget {
 }
 
 class _ChooseProfileState extends State<ChooseProfile> {
-  late Future<Company?> _company;
+  late Future<List<IndexSelect>> _company;
 
   ///选择的公司
   IndexSelect? _indexSelect;
@@ -31,14 +31,14 @@ class _ChooseProfileState extends State<ChooseProfile> {
   final GlobalKey<DropdownSearchState> _categoryKey = GlobalKey();
   @override
   void initState() {
-    _company = Api.company(context);
+    _company = Api.index(context);
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _company,
-      builder: (BuildContext context, AsyncSnapshot<Company?> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<IndexSelect>> snapshot) {
         if(snapshot.connectionState == ConnectionState.waiting){
           return const Loading();
         }
@@ -46,15 +46,14 @@ class _ChooseProfileState extends State<ChooseProfile> {
           return ErrorPage(error: snapshot.error.toString(),);
         }
         if(snapshot.hasData){
-          Company company = snapshot.data!;
           return Scaffold(
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  TopCompany(company: company,),
-
-                  const Divider(),
+                  const SizedBox(height: 30,),
+                  const TopCompany(),
+                  const SizedBox(height: 30,),
                   Text("Preventive Maintenance & Performance Monitoring",style: Theme.of(context).textTheme.headline6!,),
                   const SizedBox(height: 12,),
                   Container(
@@ -77,7 +76,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
                           child: DropdownSearch<IndexSelect>(
                               mode: Mode.MENU,
                               showSelectedItems: false,
-                              items: company.indexSelect!.map((e) => e).toList(),
+                              items: snapshot.data!.map((e) => e).toList(),
                               itemAsString: (e) => e!.name??'',
                               onChanged: (v){
                                 if(v?.id != _indexSelect?.id){
@@ -125,6 +124,10 @@ class _ChooseProfileState extends State<ChooseProfile> {
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12,bottom: 12),
+                    child: Text(DateFormat().format(DateTime.now())),
+                  ),
                   ElevatedButton(
                       onPressed: (){
                         if(_category?.toLowerCase() == Category.performance.name){
@@ -136,7 +139,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
                       },
                       child: const Text("ENTER")
                   ),
-                  Text(DateFormat().format(DateTime.now())),
+                  const SizedBox(height: 22,),
                   ElevatedButton(
                       onPressed: (){
                         CacheUtil.clear();

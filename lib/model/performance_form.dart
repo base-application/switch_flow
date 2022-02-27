@@ -6,6 +6,8 @@ class PerformanceForm {
   int? createTime;
   int? step;
   int? type;
+  String? actualReading;
+  String? settleSameDay;
 
   PerformanceForm(
       {this.id,
@@ -85,6 +87,7 @@ class Child {
   String? value;
   String? lable;
   String? letter;
+  String? unit;
 
   Child({this.operate, this.value, this.lable});
 
@@ -93,6 +96,7 @@ class Child {
     value = json['value'];
     letter = json['letter'];
     lable = json['lable'];
+    unit = json['unit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -101,6 +105,7 @@ class Child {
     data['value'] = value??"";
     data['letter'] = letter??"";
     data['lable'] = lable??"";
+    data['unit'] = unit??"";
     return data;
   }
 }

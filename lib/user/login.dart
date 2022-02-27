@@ -1,7 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:base_app/model/company_entity.dart';
+import 'package:base_app/page/top_company.dart';
+import 'package:base_app/privider/company_provider.dart';
 import 'package:base_app/request/api.dart';
 import 'package:base_app/router/app_router.gr.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -14,6 +18,15 @@ class _LoginState extends State<Login> {
   String? username;
   String? password;
   final GlobalKey<FormState> _formKey = GlobalKey();
+  Company? _company;
+
+  @override
+  void initState() {
+    Api.company(context).then((value){
+      Provider.of<CompanyProvider>(context,listen: false).company = value;
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +39,8 @@ class _LoginState extends State<Login> {
           key: _formKey,
           child: Column(
             children: [
+              const TopCompany(),
+              const SizedBox(height: 30),
               TextFormField(
                 onSaved: (v){
                   username = v;

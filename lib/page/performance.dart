@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:base_app/config/app_config.dart';
 import 'package:base_app/config/input_formtter.dart';
 import 'package:base_app/model/index_entity.dart';
@@ -12,6 +13,7 @@ import 'package:base_app/util/request.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +43,8 @@ class _PerformanceState extends State<Performance> {
   final TextEditingController _node2 = TextEditingController();
   final TextEditingController _autographText = TextEditingController();
   Map<String,dynamic> extra = {};
+  List<String> level1 = ["Root cause","Corrective action","Case settle on same day?"];
+  List<String> level3 = ["Expected settle date"];
 
   @override
   void initState() {
@@ -92,25 +96,71 @@ class _PerformanceState extends State<Performance> {
                                       ),
                                       child: Column(
                                         children:  e.content!.child!
-                                            .map<Widget>((c) =>
-                                            Container(
-                                              padding: const EdgeInsets.only(top: 20),
-                                              alignment: Alignment.centerLeft,
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 100,
-                                                        child: Text(c.lable ?? ""),
-                                                      ),
-                                                      Expanded(child:  _switchOperate(c))
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ))
-                                            .toList(),
+                                            .map<Widget>((c) {
+                                              if(level1.contains(c.lable)){
+                                                return Offstage(
+                                                  offstage: e.actualReading != "No",
+                                                  child:  Container(
+                                                    padding: const EdgeInsets.only(top: 20),
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 100,
+                                                              child: Text(c.lable ?? ""),
+                                                            ),
+                                                            Expanded(child:  _switchOperate(c,e))
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              if(level3.contains(c.lable)){
+                                                return Offstage(
+                                                  offstage: e.settleSameDay != "No",
+                                                  child:  Container(
+                                                    padding: const EdgeInsets.only(top: 20),
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 100,
+                                                              child: Text(c.lable ?? ""),
+                                                            ),
+                                                            Expanded(child:  _switchOperate(c,e))
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              return  Container(
+                                                padding: const EdgeInsets.only(top: 20),
+                                                alignment: Alignment.centerLeft,
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 100,
+                                                          child: Text(c.lable ?? ""),
+                                                        ),
+                                                        Expanded(child:  _switchOperate(c,e))
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+
+
+                                        }).toList(),
                                       ),
                                     )
                                   ]
@@ -122,7 +172,7 @@ class _PerformanceState extends State<Performance> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Performance Monitoring Comment:"),
-                  const Text("if case"),
+                  const Text("* if case are not able to settle on same day and need extra support. Write down here."),
                   const SizedBox(height: 10,),
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -134,7 +184,7 @@ class _PerformanceState extends State<Performance> {
                       children: [
                         const SizedBox(
                           width: 100,
-                          child:   Text("note"),
+                          child:   Text("Note"),
                         ),
                         Expanded(
                           child: TextFormField(
@@ -156,7 +206,6 @@ class _PerformanceState extends State<Performance> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Costomer additional comments (if any):"),
-                  const Text("if case"),
                   const SizedBox(height: 10,),
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -168,7 +217,7 @@ class _PerformanceState extends State<Performance> {
                       children: [
                         const SizedBox(
                           width: 100,
-                          child:   Text("note"),
+                          child:   Text("Note"),
                         ),
                         Expanded(
                           child: TextFormField(
@@ -194,17 +243,20 @@ class _PerformanceState extends State<Performance> {
               ),
               const SizedBox(height: 10,),
               const Text("Customer Acknowledge:"),
-              Row(
-                children: [
-                  const Text("签名"),
-                  Expanded(
-                    child: Signature(
-                      controller: _controller,
-                      height: 150,
-                      backgroundColor: Colors.white,
-                    ),
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide())
+                ),
+                child: GestureDetector(
+                  onDoubleTap: (){
+                    _controller.clear();
+                  },
+                  child: Signature(
+                    controller: _controller,
+                    height: 150,
+                    backgroundColor: Colors.white,
                   ),
-                ],
+                ),
               ),
               const SizedBox(height: 10,),
               Row(
@@ -232,20 +284,48 @@ class _PerformanceState extends State<Performance> {
                         Request.toast("sing");
                         return;
                       }
+                      String? isEmpty;
                       for (var per in snapshot.data!) {
-                        bool isEmpty = per.content?.child?.any((element) => element.operate !=AppConfig.operate0 &&  (element.value ==null || element.value!.isEmpty))??false;
-                        if(isEmpty ){
-                          Logger().i( per.content!.title! + "is empty");
-                          Request.toast( per.content!.title!  + "is empty");
-                          return;
+                        for(var element in per.content!.child!){
+                          if(isEmpty != null ) break;
+                          if(element.operate ==  AppConfig.operate0) continue;
+                          if(level1.contains(element.lable)){
+                            if(isEmpty != null ) break;
+                            if(per.actualReading =="No" && (element.value == null || element.value?.isEmpty == true)){
+                              isEmpty = per.content!.title! + " " +(element.lable??"") ;
+                              break;
+                            }
+                            continue;
+                          }
+
+                          if(level3.contains(element.lable)){
+                            if(per.settleSameDay =="No" && (element.value == null || element.value?.isEmpty == true)){
+                              isEmpty = per.content!.title! + " " +(element.lable??"") ;
+                              break;
+                            }
+                            continue;
+                          }
+                          if(element.value == null || element.value?.isEmpty == true){
+                            isEmpty = per.content!.title! + " " +(element.lable??"") ;
+                            break;
+                          }
                         }
+
+                      }
+                      if(isEmpty!=null ){
+                        Logger().d( isEmpty + " is empty");
+                        Request.toast( isEmpty  + " is empty");
+                        return;
                       }
                       extra['note1'] = _node1.text;
                       extra['note2'] = _node2.text;
                       extra['autograph_text'] = _autographText.text;
                       Uint8List? bytes =  await _controller.toPngBytes();
                       extra['autograph_img'] = base64Encode(bytes!);
-                      Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
+                      EasyLoading.show();
+                      await Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
+                      AutoRouter.of(context).pop();
+                      EasyLoading.dismiss();
                     },
                     child: const Text("Save")
                 ),
@@ -257,7 +337,7 @@ class _PerformanceState extends State<Performance> {
     ));
   }
 
-  Widget _switchOperate(Child c){
+  Widget _switchOperate(Child c,PerformanceForm form){
     if(c.operate == AppConfig.operate0){
       return Text(c.value??"");
     }if(c.operate == AppConfig.operate1){
@@ -265,17 +345,41 @@ class _PerformanceState extends State<Performance> {
         onChanged: (v){
           c.value = v;
         },
+        decoration: InputDecoration(
+          suffixIcon: Container(
+            constraints:  const BoxConstraints(
+                maxWidth: 50,
+                minWidth: 20
+            ),
+            padding: const EdgeInsets.only(right: 12),
+            child: Text(c.unit??""),
+          ),
+          suffixIconConstraints: const BoxConstraints(
+            maxWidth: 50,
+            minWidth: 20
+          )
+        ),
       );
     }if(c.operate == AppConfig.operate2){
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
             items:const ["Yes","No"],
             onChanged: (v){
               c.value = v;
-            }
+              if(c.lable == "Within setting range"){
+                form.actualReading = v;
+                setState(() {});
+              }
+              if(c.lable == "Case settle on same day?"){
+                form.settleSameDay = v;
+                setState(() {});
+              }
+            },
+
         ),
       );
     }
@@ -294,13 +398,17 @@ class _PerformanceState extends State<Performance> {
             }
           });
         },
-        child: Text(c.value ==null || c.value!.isEmpty ?  "Choose Date" :c.value!),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Text(c.value ==null || c.value!.isEmpty ?  "Choose Date" :c.value!,style: Theme.of(context).textTheme.bodyText1,),
+        ),
       );
     }
     if(c.operate == AppConfig.operate4){
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
             items:const ["Done","Not Done"],
@@ -314,6 +422,7 @@ class _PerformanceState extends State<Performance> {
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
             items:const ["Clear","Turbid"],
@@ -337,6 +446,7 @@ class _PerformanceState extends State<Performance> {
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
             items:const ["Clean","Dirty"],
@@ -350,6 +460,7 @@ class _PerformanceState extends State<Performance> {
       return  SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
             items:const ["Acceptable","To be improve"],

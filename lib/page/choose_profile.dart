@@ -108,7 +108,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
                         const SizedBox(height: 12,),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 12,top: 12),
-                          child: Text("Plant",style: Theme.of(context).textTheme.headline6,),),
+                          child: Text("Plant: ",style: Theme.of(context).textTheme.headline6,),),
                        SizedBox(
                          height: 50,
                          child:  DropdownSearch<String>(

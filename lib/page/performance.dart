@@ -281,7 +281,7 @@ class _PerformanceState extends State<Performance> {
                 child: ElevatedButton(
                     onPressed: () async {
                       if(_controller.isEmpty){
-                        Request.toast("sing");
+                        Request.toast("Please complete required information.");
                         return;
                       }
                       String? isEmpty;
@@ -498,13 +498,13 @@ class PageHeader extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text("Plant",style:  Theme.of(context).textTheme.headline6!,),
+                Text("Plant: ",style:  Theme.of(context).textTheme.headline6!,),
                 Text(plant,style:  Theme.of(context).textTheme.headline6!),
               ],
             ),
             Row(
               children: [
-                Text("Date", style:Theme.of(context).textTheme.headline6!),
+                Text("Date: ", style:Theme.of(context).textTheme.headline6!),
                 Text(DateFormat().format(DateTime.now()), style:Theme.of(context).textTheme.headline6!),
               ],
             ),

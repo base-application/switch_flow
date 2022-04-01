@@ -3,9 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  connectivity_plus_windows
-  sentry_flutter
-  url_launcher_windows
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

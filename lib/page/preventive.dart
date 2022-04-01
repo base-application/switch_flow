@@ -107,7 +107,7 @@ class _PreventiveState extends State<Preventive> {
                         decoration: BoxDecoration(
                             border: Border.all(color: Theme.of(context).colorScheme.background),
                             borderRadius: BorderRadius.circular(12),
-                            color: pageIndex == index ? Theme.of(context).colorScheme.background : Colors.white
+                            color: pageIndex == index ? Color(0xffccddff) : Colors.white
                         ),
                         child: Row(
                           children: [
@@ -312,6 +312,7 @@ class _PreventiveState extends State<Preventive> {
                               )
                           ).toList() +
                               [
+                                SizedBox(height: 12,),
                                 Row(
                                   children: [
                                     if(pageIndex>0) Expanded(
@@ -322,6 +323,7 @@ class _PreventiveState extends State<Preventive> {
                                             child: const Text("Back")
                                         )
                                     ),
+                                    if(pageIndex>0) SizedBox(width: 12,),
                                     Expanded(child:  ElevatedButton(
                                         onPressed: (){
                                           _save(snapshot.data!);

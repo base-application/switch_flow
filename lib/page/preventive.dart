@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:base_app/config/app_config.dart';
 import 'package:base_app/config/input_formtter.dart';
 import 'package:base_app/model/index_entity.dart';
@@ -15,11 +16,14 @@ import 'package:base_app/request/api.dart';
 import 'package:base_app/util/cache_util.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart' hide Step;
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html_character_entities/html_character_entities.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
 import 'package:collection/collection.dart';
+
+import '../util/request.dart';
 
 class Preventive extends StatefulWidget {
   final IndexSelect indexSelect;
@@ -54,9 +58,11 @@ class _PreventiveState extends State<Preventive> {
   void initState() {
     String cache = CacheUtil.get(CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant);
     if(cache.isNotEmpty){
-      _future = Future.value(PreventiveForm.fromJson(jsonDecode(cache)));
+      PreventiveForm _pp= PreventiveForm.fromJson(jsonDecode(cache));
+      _future = Future.value(_pp);
+    }else{
+      _future = Api.preventiveForm(context, widget.indexSelect.id!);
     }
-    _future = Api.preventiveForm(context, widget.indexSelect.id!);
     super.initState();
   }
   @override
@@ -161,6 +167,7 @@ class _PreventiveState extends State<Preventive> {
                                                 showAsSuffixIcons: true,
                                                 mode: Mode.MENU,
                                                 showSelectedItems: true,
+                                                selectedItem: e.status,
                                                 items:const ["Done","Not Done"],
                                                 onChanged: (v){
                                                   e.status = v;
@@ -350,6 +357,7 @@ class _PreventiveState extends State<Preventive> {
       return Text(c.value??"");
     }if(c.operate == AppConfig.preOperate1){
       return TextFormField(
+        initialValue: c.value,
         onChanged: (v){
           c.value = v;
         },
@@ -370,6 +378,7 @@ class _PreventiveState extends State<Preventive> {
       );
     }if(c.operate == AppConfig.preOperate2){
       return TextFormField(
+        initialValue: c.value,
         inputFormatters: [
           XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 1,isAllowDecimal: true),],
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -386,6 +395,7 @@ class _PreventiveState extends State<Preventive> {
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
+            selectedItem: c.value,
             items:const ["Poor condition","Good condition","No equipment at side"],
             onChanged: (v){
               c.value = v;
@@ -400,6 +410,7 @@ class _PreventiveState extends State<Preventive> {
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
+            selectedItem: c.value,
             items:const ["To be improve","Acceptable"],
             onChanged: (v){
               c.value = v;
@@ -409,6 +420,7 @@ class _PreventiveState extends State<Preventive> {
     }
     if(c.operate == AppConfig.preOperate5){
       return TextFormField(
+        initialValue: c.value,
         inputFormatters: [
           XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 2,isAllowDecimal: true),],
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -426,6 +438,7 @@ class _PreventiveState extends State<Preventive> {
             mode: Mode.MENU,
             showSelectedItems: true,
             items:const ["Have white buble","Don’t have white bubble"],
+            selectedItem: c.value,
             onChanged: (v){
               c.value = v;
             }
@@ -434,6 +447,7 @@ class _PreventiveState extends State<Preventive> {
     }
     if(c.operate == AppConfig.preOperate7){
       return TextFormField(
+        initialValue: c.value,
         inputFormatters: [
           XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 2,isAllowDecimal: true),
           MaxMinTextInputFormatter(14.00,0.00)
@@ -452,6 +466,7 @@ class _PreventiveState extends State<Preventive> {
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
+            selectedItem: c.value,
             items:const ["Bad condition","Good condition","Unable to calibrate","No pH probe onsite"],
             onChanged: (v){
               c.value = v;
@@ -472,6 +487,7 @@ class _PreventiveState extends State<Preventive> {
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
+            selectedItem: c.value,
             items:const ["Bad condition","Good condition","Unable to calibrate","No pH probe onsite"],
             onChanged: (v){
               c.value = v;
@@ -483,6 +499,7 @@ class _PreventiveState extends State<Preventive> {
       return  SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            selectedItem: c.value,
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
@@ -505,12 +522,23 @@ class _PreventiveState extends State<Preventive> {
         lastIndex = pageIndex;
       }
     }else{
+      if(_signatureController.isEmpty){
+        Request.toast("Please complete required information.");
+        return;
+      }
       extra['note1'] = _node2.text;
       extra['autograph_text'] = _autographText.text;
       Uint8List? bytes =  await _signatureController.toPngBytes();
-      extra['autograph_img'] = base64Encode(bytes!);
-      extra['autograph_img'] = bytes;
-      Api.preventiveSubmit(context,preventive,widget.indexSelect.id!,extra,widget.plant);
+      if(bytes!=null){
+        extra['autograph_img'] = base64Encode(bytes);
+      }
+      EasyLoading.show();
+      bool? success = await Api.preventiveSubmit(context,preventive,widget.indexSelect.id!,extra,widget.plant);
+      if(success==true){
+        CacheUtil.remove(CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant);
+        AutoRouter.of(context).pop();
+      }
+      EasyLoading.dismiss();
     }
   }
 
@@ -525,7 +553,7 @@ class _PreventiveState extends State<Preventive> {
     Child? b = p.child!.firstWhereOrNull((element) => element.lable == calibratedTime);
     if(a!=null  && b!=null&& a.value!.isNotEmpty && b.value!.isNotEmpty){
 
-      return ((((int.parse(a.value!)) / (int.parse(b.value!)) ) *36000) /1000).toStringAsFixed(2);
+      return ((((int.parse(a.value!)) / (int.parse(b.value!)) ) *3600) /1000).toStringAsFixed(2);
     }
     return "";
   }

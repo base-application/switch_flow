@@ -11,7 +11,6 @@ import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/request/api.dart';
 import 'package:base_app/util/request.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
@@ -270,7 +269,7 @@ class _PerformanceState extends State<Performance> {
               const SizedBox(height: 10,),
               Row(
                 children: [
-                  const Text("Date"),
+                  const Text("Date: "),
                   Text(DateFormat().format(DateTime.now())),
                 ],
               ),
@@ -323,9 +322,11 @@ class _PerformanceState extends State<Performance> {
                       Uint8List? bytes =  await _controller.toPngBytes();
                       extra['autograph_img'] = base64Encode(bytes!);
                       EasyLoading.show();
-                      await Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
-                      AutoRouter.of(context).pop();
-                      EasyLoading.dismiss();
+                      bool? success =  await Api.performanceSubmit(context, snapshot.data!,widget.indexSelect.id!,extra,widget.plant);
+                      if(success==true){
+                        AutoRouter.of(context).pop();
+                        EasyLoading.dismiss();
+                      }
                     },
                     child: const Text("Save")
                 ),

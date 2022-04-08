@@ -22,4 +22,8 @@ class CacheUtil{
     _preferences?.clear();
   }
 
+  static remove(key){
+    _preferences?.remove(key);
+  }
+
 }

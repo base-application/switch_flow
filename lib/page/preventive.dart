@@ -53,10 +53,14 @@ class _PreventiveState extends State<Preventive> {
 
   String calibratedVolume = "Calibrated volume (ml)";
   String calibratedTime = "Calibration time (sec)";
+  String calibratedTime10 = "Calibration Time";
+
+  late String cacheId ;
 
   @override
   void initState() {
-    String cache = CacheUtil.get(CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant);
+    cacheId = Provider.of<AuthProvider>(context,listen: false).authUserEntity.name!+CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant;
+    String cache = CacheUtil.get(cacheId);
     if(cache.isNotEmpty){
       PreventiveForm _pp= PreventiveForm.fromJson(jsonDecode(cache));
       _future = Future.value(_pp);
@@ -91,6 +95,9 @@ class _PreventiveState extends State<Preventive> {
                 child: PageHeader(
                   plant: widget.plant,
                   customerName: widget.indexSelect.name ?? "",
+                  save: (){
+                    CacheUtil.save(cacheId, jsonEncode(snapshot.data!.toJson()));
+                  },
                 ),
               ),
               SizedBox(
@@ -477,7 +484,7 @@ class _PreventiveState extends State<Preventive> {
     if(c.operate == AppConfig.preOperate9){
       return Text(_valueOper9(p));
     }
-    if(c.operate == AppConfig.preOperate9){
+    if(c.operate == AppConfig.preOperate10){
       return Text(_valueOper10(p));
     }
     if(c.operate == AppConfig.preOperate8){
@@ -514,7 +521,7 @@ class _PreventiveState extends State<Preventive> {
   }
 
   _save(PreventiveForm preventive) async {
-    CacheUtil.save(CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant, jsonEncode(preventive.toJson()));
+    CacheUtil.save(cacheId, jsonEncode(preventive.toJson()));
     if(pageIndex <4 ){
       _controller.jumpToPage(pageIndex+1);
       pageIndex = _controller.page!.toInt();
@@ -535,7 +542,7 @@ class _PreventiveState extends State<Preventive> {
       EasyLoading.show();
       bool? success = await Api.preventiveSubmit(context,preventive,widget.indexSelect.id!,extra,widget.plant);
       if(success==true){
-        CacheUtil.remove(CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant);
+        CacheUtil.remove(cacheId);
         AutoRouter.of(context).pop();
       }
       EasyLoading.dismiss();
@@ -558,10 +565,10 @@ class _PreventiveState extends State<Preventive> {
     return "";
   }
   String _valueOper10(Content p) {
-    Child? b = p.child!.firstWhereOrNull((element) => element.lable == calibratedTime);
+    Child? b = p.child!.firstWhereOrNull((element) => element.lable == calibratedTime10);
     if( b!=null&& b.value!.isNotEmpty){
 
-      return (((20 / (int.parse(b.value!)) ) *36000) /1000).toStringAsFixed(2);
+      return (((20 / (int.parse(b.value!)) ) *3600) /1000).toStringAsFixed(2);
     }
     return "";
   }

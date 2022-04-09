@@ -18,6 +18,7 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:signature/signature.dart';
 
+import '../util/cache_util.dart';
 import 'commen.dart';
 
 class Performance extends StatefulWidget {
@@ -44,10 +45,18 @@ class _PerformanceState extends State<Performance> {
   Map<String,dynamic> extra = {};
   List<String> level1 = ["Root cause","Corrective action","Case settle on same day?"];
   List<String> level3 = ["Expected settle date"];
+  late String cacheId;
 
   @override
   void initState() {
-    _performanceForm = Api.performanceForm(context, widget.indexSelect.id!);
+    cacheId = Provider.of<AuthProvider>(context,listen: false).authUserEntity.name!+CacheKey.performance.name + widget.indexSelect.id!.toString() + widget.plant;
+    String cache = CacheUtil.get(cacheId);
+    if(cache.isNotEmpty){
+      List<PerformanceForm> _pp= jsonDecode(cache)?.map<PerformanceForm>((e)=> PerformanceForm.fromJson(e)).toList() ;
+      _performanceForm = Future.value(_pp);
+    }else{
+      _performanceForm = Api.performanceForm(context, widget.indexSelect.id!);
+    }
     super.initState();
   }
 
@@ -79,6 +88,9 @@ class _PerformanceState extends State<Performance> {
               PageHeader(
                 plant: widget.plant,
                 customerName: widget.indexSelect.name ?? "",
+                save: (){
+                  CacheUtil.save(cacheId, jsonEncode(snapshot.data));
+                },
               ),
               ...snapshot.data!.map((e) => Container(
                             margin: const EdgeInsets.only(top: 20,),
@@ -343,6 +355,7 @@ class _PerformanceState extends State<Performance> {
       return Text(c.value??"");
     }if(c.operate == AppConfig.operate1){
       return TextFormField(
+        initialValue: c.value,
         onChanged: (v){
           c.value = v;
         },
@@ -365,6 +378,7 @@ class _PerformanceState extends State<Performance> {
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            selectedItem: c.value,
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
@@ -409,6 +423,7 @@ class _PerformanceState extends State<Performance> {
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            selectedItem: c.value,
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
@@ -423,6 +438,7 @@ class _PerformanceState extends State<Performance> {
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            selectedItem: c.value,
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
@@ -435,6 +451,7 @@ class _PerformanceState extends State<Performance> {
     }
     if(c.operate == AppConfig.operate6){
       return TextFormField(
+        initialValue: c.value,
         inputFormatters: [
           XNumberTextInputFormatter(maxIntegerLength: null, maxDecimalLength: 1,isAllowDecimal: true),],
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -447,6 +464,7 @@ class _PerformanceState extends State<Performance> {
       return SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            selectedItem: c.value,
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
@@ -461,6 +479,7 @@ class _PerformanceState extends State<Performance> {
       return  SizedBox(
         height: 40,
         child: DropdownSearch<String>(
+            selectedItem: c.value,
             showAsSuffixIcons: true,
             mode: Mode.MENU,
             showSelectedItems: true,
@@ -478,8 +497,9 @@ class _PerformanceState extends State<Performance> {
 class PageHeader extends StatelessWidget {
   final String customerName;
   final String plant;
+  final Function? save;
 
-  const PageHeader({Key? key, required this.customerName, required this.plant})
+  const PageHeader({Key? key, required this.customerName, required this.plant, this.save})
       : super(key: key);
 
   @override
@@ -489,8 +509,15 @@ class PageHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text("Customer ",style: Theme.of(context).textTheme.headline2!,),
-            Text(customerName,style: Theme.of(context).textTheme.headline2!,),
+            Expanded(child: Row(
+              children: [
+                Text("Customer ",style: Theme.of(context).textTheme.headline2!,),
+                Text(customerName,style: Theme.of(context).textTheme.headline2!,),
+              ],
+            )),
+            if(save!=null)TextButton(onPressed: (){
+              save!();
+            }, child: const Text("Save")),
           ],
         ),
         const SizedBox(height: 12,),

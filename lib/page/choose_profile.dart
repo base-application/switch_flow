@@ -47,107 +47,108 @@ class _ChooseProfileState extends State<ChooseProfile> {
         }
         if(snapshot.hasData){
           return Scaffold(
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: [
-                  const SizedBox(height: 30,),
-                  const TopCompany(),
-                  const SizedBox(height: 30,),
-                  Text("Preventive Maintenance & Performance Monitoring",style: Theme.of(context).textTheme.headline6!,),
-                  const SizedBox(height: 12,),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.background,
-                      borderRadius: BorderRadius.circular(12)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // const Text("name"),
-                        // const Text("NAME"),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: Text("Customer",style: Theme.of(context).textTheme.headline6),
-                        ),
-                        SizedBox(
-                          height: 50,
-                          child: DropdownSearch<IndexSelect>(
-                              mode: Mode.MENU,
-                              showSelectedItems: false,
-                              items: snapshot.data!.map((e) => e).toList(),
-                              itemAsString: (e) => e!.name??'',
-                              onChanged: (v){
-                                if(v?.id != _indexSelect?.id){
-                                  _indexSelect = v;
-                                  _categories = v?.category??[];
-                                  _plants = v?.plant??[];
-                                  _plantKey.currentState?.clear();
-                                  _categoryKey.currentState?.clear();
-                                  setState(() {});
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    const TopCompany(),
+                    const SizedBox(height: 30,),
+                    Text("Preventive Maintenance & Performance Monitoring",style: Theme.of(context).textTheme.headline6!,),
+                    const SizedBox(height: 12,),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // const Text("name"),
+                          // const Text("NAME"),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Text("Customer",style: Theme.of(context).textTheme.headline6),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            child: DropdownSearch<IndexSelect>(
+                                mode: Mode.MENU,
+                                showSelectedItems: false,
+                                items: snapshot.data!.map((e) => e).toList(),
+                                itemAsString: (e) => e!.name??'',
+                                onChanged: (v){
+                                  if(v?.id != _indexSelect?.id){
+                                    _indexSelect = v;
+                                    _categories = v?.category??[];
+                                    _plants = v?.plant??[];
+                                    _plantKey.currentState?.clear();
+                                    _categoryKey.currentState?.clear();
+                                    setState(() {});
+                                  }
                                 }
-                              }
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12,top: 12),
-                          child: Text("Type Of Check List",style: Theme.of(context).textTheme.headline6),),
-                        SizedBox(
-                          height: 50,
-                          child: DropdownSearch<String>(
-                              key: _categoryKey,
-                              mode: Mode.MENU,
-                              showSelectedItems: true,
-                              items: _categories?.map((e) => e).toList()??[],
-                              onChanged: (v){
-                                _category = v;
-                              }
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12,top: 12),
+                            child: Text("Type Of Check List",style: Theme.of(context).textTheme.headline6),),
+                          SizedBox(
+                            height: 50,
+                            child: DropdownSearch<String>(
+                                key: _categoryKey,
+                                mode: Mode.MENU,
+                                showSelectedItems: true,
+                                items: _categories?.map((e) => e).toList()??[],
+                                onChanged: (v){
+                                  _category = v;
+                                }
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 12,),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12,top: 12),
-                          child: Text("Plant: ",style: Theme.of(context).textTheme.headline6,),),
-                       SizedBox(
-                         height: 50,
-                         child:  DropdownSearch<String>(
-                             key: _plantKey,
-                             mode: Mode.MENU,
-                             showSelectedItems: true,
-                             items: _plants?.map((e) => e).toList()??[],
-                             onChanged: (v){
-                               _plant = v;
-                             }
-                         ),
-                       )
-                      ],
+                          const SizedBox(height: 12,),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12,top: 12),
+                            child: Text("Plant: ",style: Theme.of(context).textTheme.headline6,),),
+                          SizedBox(
+                            height: 50,
+                            child:  DropdownSearch<String>(
+                                key: _plantKey,
+                                mode: Mode.MENU,
+                                showSelectedItems: true,
+                                items: _plants?.map((e) => e).toList()??[],
+                                onChanged: (v){
+                                  _plant = v;
+                                }
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12,bottom: 12),
-                    child: Text(DateFormat().format(DateTime.now())),
-                  ),
-                  ElevatedButton(
-                      onPressed: (){
-                        if(_category?.toLowerCase() == Category.performance.name){
-                          AutoRouter.of(context).push(PerformanceRoute(indexSelect: _indexSelect!, plant: _plant!));
-                        }
-                        if(_category?.toLowerCase() == Category.preventive.name){
-                          AutoRouter.of(context).push(PreventiveRoute(indexSelect: _indexSelect!, plant: _plant!));
-                        }
-                      },
-                      child: const Text("ENTER")
-                  ),
-                  const SizedBox(height: 22,),
-                  ElevatedButton(
-                      onPressed: (){
-                        CacheUtil.clear();
-                        AutoRouter.of(context).replaceAll([ const LoginRoute()]);
-                      },
-                      child: const Text("Login Out")
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12,bottom: 12),
+                      child: Text(DateFormat().format(DateTime.now())),
+                    ),
+                    ElevatedButton(
+                        onPressed: (){
+                          if(_category?.toLowerCase() == Category.performance.name){
+                            AutoRouter.of(context).push(PerformanceRoute(indexSelect: _indexSelect!, plant: _plant!));
+                          }
+                          if(_category?.toLowerCase() == Category.preventive.name){
+                            AutoRouter.of(context).push(PreventiveRoute(indexSelect: _indexSelect!, plant: _plant!));
+                          }
+                        },
+                        child: const Text("ENTER")
+                    ),
+                    const SizedBox(height: 22,),
+                    ElevatedButton(
+                        onPressed: (){
+                          CacheUtil.clear();
+                          AutoRouter.of(context).replaceAll([ const LoginRoute()]);
+                        },
+                        child: const Text("Login Out")
+                    )
+                  ],
+                ),
               ),
             ),
           );

@@ -403,9 +403,9 @@ class _PerformanceState extends State<Performance> {
         onTap: (){
           showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
+              initialDate: DateTime.now().add(const Duration(days: 1)),
               firstDate: DateTime.now(),
-              lastDate: DateTime.now()
+              lastDate: DateTime.now().add(const Duration(days: 365000))
           ).then((value) {
             if(value!=null){
               c.value = DateFormat().format(value);

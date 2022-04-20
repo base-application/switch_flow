@@ -38,15 +38,15 @@ class Api {
     return company;
   }
 
-  static Future<List<PerformanceForm>?> performanceForm(BuildContext context,int cid) async{
-    ResponseModel response = await Request(context).post("/performance/index",data: FormData.fromMap({"cid":cid}));
+  static Future<List<PerformanceForm>?> performanceForm(BuildContext context,int cid,String plant) async{
+    ResponseModel response = await Request(context).post("/performance/index",data: FormData.fromMap({"cid":cid,"plant":plant}));
     if(response.code !=1) return null;
     List<PerformanceForm> list =  response.data.map<PerformanceForm>((e)=>PerformanceForm.fromJson(e)).toList();
     return list;
   }
 
-  static Future<PreventiveForm?> preventiveForm(BuildContext context,int cid) async{
-    ResponseModel response = await Request(context).post("/preventive/index",data: FormData.fromMap({"cid":cid}));
+  static Future<PreventiveForm?> preventiveForm(BuildContext context,int cid,String plant) async{
+    ResponseModel response = await Request(context).post("/preventive/index",data: FormData.fromMap({"cid":cid,"plant":plant}));
     if(response.code !=1) return null;
     return PreventiveForm.fromJson(response.data);
   }

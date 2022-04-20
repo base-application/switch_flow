@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:base_app/config/app_config.dart';
-import 'package:base_app/model/company_entity.dart';
 import 'package:base_app/model/index_entity.dart';
 import 'package:base_app/page/commen.dart';
 import 'package:base_app/page/top_company.dart';

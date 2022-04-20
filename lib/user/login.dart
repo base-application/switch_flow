@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:base_app/model/company_entity.dart';
 import 'package:base_app/page/top_company.dart';
 import 'package:base_app/privider/company_provider.dart';
 import 'package:base_app/request/api.dart';
@@ -18,7 +17,6 @@ class _LoginState extends State<Login> {
   String? username;
   String? password;
   final GlobalKey<FormState> _formKey = GlobalKey();
-  Company? _company;
 
   @override
   void initState() {
@@ -52,6 +50,7 @@ class _LoginState extends State<Login> {
                   if(v==null || v.isEmpty){
                     return "is not empty";
                   }
+                  return null;
                 },
               ),
               const SizedBox(height: 12,),
@@ -67,6 +66,7 @@ class _LoginState extends State<Login> {
                   if(v==null || v.isEmpty){
                     return "is not empty";
                   }
+                  return null;
                 },
               ),
               const SizedBox(height: 30,),

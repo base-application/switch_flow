@@ -46,6 +46,8 @@ class _PerformanceState extends State<Performance> {
   List<String> level1 = ["Root cause","Corrective action","Case settle on same day?"];
   List<String> level3 = ["Expected settle date"];
   late String cacheId;
+  List<String> lineTow = ["Root cause","Corrective action"];
+
 
   @override
   void initState() {
@@ -55,7 +57,7 @@ class _PerformanceState extends State<Performance> {
       List<PerformanceForm> _pp= jsonDecode(cache)?.map<PerformanceForm>((e)=> PerformanceForm.fromJson(e)).toList() ;
       _performanceForm = Future.value(_pp);
     }else{
-      _performanceForm = Api.performanceForm(context, widget.indexSelect.id!);
+      _performanceForm = Api.performanceForm(context, widget.indexSelect.id!,widget.plant);
     }
     super.initState();
   }
@@ -359,13 +361,16 @@ class _PerformanceState extends State<Performance> {
         onChanged: (v){
           c.value = v;
         },
+        minLines: textLines(c),
+        maxLines: textLines(c),
         decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(top: 12,bottom: 12,left: 12),
           suffixIcon: Container(
             constraints:  const BoxConstraints(
                 maxWidth: 50,
                 minWidth: 20
             ),
-            padding: const EdgeInsets.only(right: 12),
+            padding: const EdgeInsets.only(right: 12,top: 12,bottom: 12),
             child: Text(c.unit??""),
           ),
           suffixIconConstraints: const BoxConstraints(
@@ -491,6 +496,13 @@ class _PerformanceState extends State<Performance> {
       );
     }
     return Container();
+  }
+
+  textLines(Child child){
+    if(lineTow.contains(child.lable)){
+      return 5;
+    }
+    return 1;
   }
 }
 

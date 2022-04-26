@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:auto_route/auto_route.dart';
 import 'package:base_app/config/app_config.dart';
 import 'package:base_app/model/auth_user_entity.dart';
 import 'package:base_app/privider/auth_provider.dart';
+import 'package:base_app/router/app_router.gr.dart';
+import 'package:base_app/util/cache_util.dart';
 import 'package:base_app/util/request_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +33,8 @@ class Request {
       // 在请求被发送之前做一些事情
       onRequest: (RequestOptions options, RequestInterceptorHandler handler) async {
         //判断用户是否登陆
-        AuthUserEntity authUserEntity = Provider.of<AuthProvider>(context,listen: false).authUserEntity;
-        options.headers["Authorization"] = authUserEntity.token??"";
+        AuthUserEntity? authUserEntity = Provider.of<AuthProvider>(context,listen: false).authUserEntity;
+        options.headers["Authorization"] = authUserEntity?.token??"";
 
         Logger().d("request hgeader" + jsonEncode(options.headers));
         return handler.next(options);
@@ -42,6 +45,11 @@ class Request {
         ResponseModel model = ResponseModel.fromJson(jsonDecode(response.data));
         if(model.code !=1){
           toast(model.msg);
+          if(model.code == 10001 && response.requestOptions.path != '/user/login'){
+            CacheUtil.clear();
+            Provider.of<AuthProvider>(context,listen: false).authUserEntity = null;
+            AutoRouter.of(context).replaceAll([ const LoginRoute()]);
+          }
         }
         return handler.next(response);
       },

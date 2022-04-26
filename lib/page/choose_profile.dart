@@ -3,12 +3,14 @@ import 'package:base_app/config/app_config.dart';
 import 'package:base_app/model/index_entity.dart';
 import 'package:base_app/page/commen.dart';
 import 'package:base_app/page/top_company.dart';
+import 'package:base_app/privider/auth_provider.dart';
 import 'package:base_app/request/api.dart';
 import 'package:base_app/router/app_router.gr.dart';
 import 'package:base_app/util/cache_util.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ChooseProfile extends StatefulWidget {
   const ChooseProfile({Key? key}) : super(key: key);
@@ -142,6 +144,7 @@ class _ChooseProfileState extends State<ChooseProfile> {
                     ElevatedButton(
                         onPressed: (){
                           CacheUtil.clear();
+                          Provider.of<AuthProvider>(context,listen: false).authUserEntity = null;
                           AutoRouter.of(context).replaceAll([ const LoginRoute()]);
                         },
                         child: const Text("Login Out")

@@ -10,6 +10,7 @@ import 'package:base_app/util/request.dart';
 import 'package:base_app/util/request_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer' as developer;
 
@@ -48,6 +49,8 @@ class Api {
   static Future<PreventiveForm?> preventiveForm(BuildContext context,int cid,String plant) async{
     ResponseModel response = await Request(context).post("/preventive/index",data: FormData.fromMap({"cid":cid,"plant":plant}));
     if(response.code !=1) return null;
+    developer.log(jsonEncode(response.data));
+    Logger().d("request hgeader" + jsonEncode(response.data));
     return PreventiveForm.fromJson(response.data);
   }
 

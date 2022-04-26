@@ -51,7 +51,7 @@ class _PerformanceState extends State<Performance> {
 
   @override
   void initState() {
-    cacheId = Provider.of<AuthProvider>(context,listen: false).authUserEntity.name!+CacheKey.performance.name + widget.indexSelect.id!.toString() + widget.plant;
+    cacheId = Provider.of<AuthProvider>(context,listen: false).authUserEntity!.name!+CacheKey.performance.name + widget.indexSelect.id!.toString() + widget.plant;
     String cache = CacheUtil.get(cacheId);
     if(cache.isNotEmpty){
       List<PerformanceForm> _pp= jsonDecode(cache)?.map<PerformanceForm>((e)=> PerformanceForm.fromJson(e)).toList() ;
@@ -251,7 +251,7 @@ class _PerformanceState extends State<Performance> {
               Row(
                 children: [
                   const Text("Performance Monitoring Done By :"),
-                  Text(Provider.of<AuthProvider>(context,listen: false).authUserEntity.name??"")
+                  Text(Provider.of<AuthProvider>(context,listen: false).authUserEntity!.name??"")
                 ],
               ),
               const SizedBox(height: 10,),

@@ -7,19 +7,20 @@ import 'package:flutter/cupertino.dart';
 
 class AuthProvider extends ChangeNotifier{
 
-  AuthUserEntity _authUserEntity = AuthUserEntity();
+  AuthUserEntity? _authUserEntity;
 
   AuthProvider(){
-    if(CacheUtil.get(CacheKey.auth.name).isNotEmpty){
+    print(CacheUtil.get(CacheKey.auth.name));
+    if(CacheUtil.get(CacheKey.auth.name)!="null" &&CacheUtil.get(CacheKey.auth.name).isNotEmpty){
       _authUserEntity = AuthUserEntity.fromJson(jsonDecode(CacheUtil.get(CacheKey.auth.name)));
     }
   }
 
-  AuthUserEntity get authUserEntity {
+  AuthUserEntity? get authUserEntity {
     return _authUserEntity;
   }
 
-  set authUserEntity(AuthUserEntity value) {
+  set authUserEntity(AuthUserEntity? value) {
     _authUserEntity = value;
    CacheUtil.save(CacheKey.auth.name, jsonEncode(value));
     notifyListeners();

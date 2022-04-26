@@ -59,7 +59,7 @@ class _PreventiveState extends State<Preventive> {
 
   @override
   void initState() {
-    cacheId = Provider.of<AuthProvider>(context,listen: false).authUserEntity.name!+CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant;
+    cacheId = Provider.of<AuthProvider>(context,listen: false).authUserEntity!.name!+CacheKey.preventive.name + widget.indexSelect.id!.toString() + widget.plant;
     String cache = CacheUtil.get(cacheId);
     if(cache.isNotEmpty){
       PreventiveForm _pp= PreventiveForm.fromJson(jsonDecode(cache));
@@ -212,7 +212,7 @@ class _PreventiveState extends State<Preventive> {
                                   Row(
                                     children: [
                                       const Text("Performance Monitoring Done By :"),
-                                      Text(Provider.of<AuthProvider>(context,listen: false).authUserEntity.name??"")
+                                      Text(Provider.of<AuthProvider>(context,listen: false).authUserEntity!.name??"")
                                     ],
                                   ),
                                   const SizedBox(height: 12,),
@@ -282,11 +282,11 @@ class _PreventiveState extends State<Preventive> {
                                 child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text("Location:" + e.content!.location!),
-                                      Text(e.content!.first! + "." + e.content!.machine!),
-                                      const SizedBox(height: 10,),
+                                      if(e.content!.title != "Comments")Text("Location:" + e.content!.location!),
+                                      if(e.content!.title != "Comments")Text(e.content!.first! + "." + e.content!.machine!),
+                                      if(e.content!.title != "Comments") const SizedBox(height: 10,),
                                       Container(
-                                        padding: const EdgeInsets.all(16),
+                                        padding: const EdgeInsets.only(left: 16,right: 16,top: 0,bottom: 20),
                                         decoration: BoxDecoration(
                                             color: Theme.of(context).colorScheme.background,
                                             borderRadius: BorderRadius.circular(22)

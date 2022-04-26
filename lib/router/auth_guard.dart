@@ -9,7 +9,7 @@ class AuthGuard extends AutoRouteGuard {
   void onNavigation(NavigationResolver resolver, StackRouter router) {
     developer.log(resolver.route.name,name: "auth guard");
 
-    String? token = Provider.of<AuthProvider>(AppConfig.navigatorKey.currentContext!,listen: false).authUserEntity.token;
+    String? token = Provider.of<AuthProvider>(AppConfig.navigatorKey.currentContext!,listen: false).authUserEntity?.token;
     if(token == null && resolver.route.name != LoginRoute.name){
       router.push(const LoginRoute());
     }

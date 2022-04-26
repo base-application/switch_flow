@@ -9,6 +9,7 @@ class CompanyProvider extends ChangeNotifier{
 
 
   CompanyProvider(){
+    print(CacheUtil.get(CacheKey.auth.name));
     if(CacheUtil.get(CacheKey.auth.name).isNotEmpty){
       _company = Company.fromJson(jsonDecode(CacheUtil.get(CacheKey.company.name)));
     }

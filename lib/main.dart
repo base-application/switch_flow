@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    String? token = Provider.of<AuthProvider>(context,listen: false).authUserEntity.token;
+    String? token = Provider.of<AuthProvider>(context,listen: false).authUserEntity?.token;
 
     return MaterialApp.router(
       title: AppConfig.title,

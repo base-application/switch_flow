@@ -283,7 +283,7 @@ class _PreventiveState extends State<Preventive> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       if(e.content!.title != "Comments")Text("Location:" + e.content!.location!),
-                                      if(e.content!.title != "Comments")Text(e.content!.first! + "." + e.content!.machine!),
+                                      if(e.content!.title != "Comments")Text((e.content!.num?.toString()??'') + "." + e.content!.machine!),
                                       if(e.content!.title != "Comments") const SizedBox(height: 10,),
                                       Container(
                                         padding: const EdgeInsets.only(left: 16,right: 16,top: 0,bottom: 20),

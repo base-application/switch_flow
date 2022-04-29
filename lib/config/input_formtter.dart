@@ -105,6 +105,7 @@ class MaxMinTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue,
       TextEditingValue newValue) {
+    if(newValue.text == "") return newValue;
     if (isToDoubleError(newValue.text)) return oldValue;
 
     if (double.parse(newValue.text) > max || double.parse(newValue.text) < min) {

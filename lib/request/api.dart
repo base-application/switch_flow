@@ -41,6 +41,7 @@ class Api {
 
   static Future<List<PerformanceForm>?> performanceForm(BuildContext context,int cid,String plant) async{
     ResponseModel response = await Request(context).post("/performance/index",data: FormData.fromMap({"cid":cid,"plant":plant}));
+    developer.log(jsonEncode(response.data));
     if(response.code !=1) return null;
     List<PerformanceForm> list =  response.data.map<PerformanceForm>((e)=>PerformanceForm.fromJson(e)).toList();
     return list;

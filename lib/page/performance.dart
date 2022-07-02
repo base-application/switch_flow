@@ -43,8 +43,9 @@ class _PerformanceState extends State<Performance> {
   final TextEditingController _node2 = TextEditingController();
   final TextEditingController _autographText = TextEditingController();
   Map<String,dynamic> extra = {};
-  List<String> level1 = ["Root cause","Corrective action","Case settle on same day?"];
-  List<String> level3 = ["Expected settle date"];
+  List<String> level1 = ["Root cause","Corrective action","Case settle on same day?","Type of Upset Condition","Diagnosis of Cause of Upset Condition (Root Cause)","Any Non Compliance of Discharge Standard Occurred","Corrective Action Taken"];
+  List<String> level3 = ["Expected settle date","Expected Conditions Returned to Normal"];
+  List<String> level4 = ["Expected Conditions Returned to Normal"];
   late String cacheId;
   List<String> lineTow = ["Root cause","Corrective action"];
 
@@ -134,7 +135,7 @@ class _PerformanceState extends State<Performance> {
                                               }
                                               if(level3.contains(c.lable)){
                                                 return Offstage(
-                                                  offstage: e.settleSameDay != "No",
+                                                  offstage: e.settleSameDay == "No",
                                                   child:  Container(
                                                     padding: const EdgeInsets.only(top: 20),
                                                     alignment: Alignment.centerLeft,
@@ -495,6 +496,51 @@ class _PerformanceState extends State<Performance> {
         ),
       );
     }
+    if(c.operate == AppConfig.operate9){
+      return  SizedBox(
+        height: 40,
+        child: DropdownSearch<String>(
+            selectedItem: c.value,
+            showAsSuffixIcons: true,
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            items:const ["Good","Bad"],
+            onChanged: (v){
+              c.value = v;
+            }
+        ),
+      );
+    }
+    if(c.operate == AppConfig.operate10){
+      return  SizedBox(
+        height: 40,
+        child: DropdownSearch<String>(
+            selectedItem: c.value,
+            showAsSuffixIcons: true,
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            items:const ["Carry over","No carryover "],
+            onChanged: (v){
+              c.value = v;
+            }
+        ),
+      );
+    }
+    if(c.operate == AppConfig.operate11){
+      return  SizedBox(
+        height: 40,
+        child: DropdownSearch<String>(
+            selectedItem: c.value,
+            showAsSuffixIcons: true,
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            items:const ["Clear","Turbid"],
+            onChanged: (v){
+              c.value = v;
+            }
+        ),
+      );
+    }
     return Container();
   }
 
@@ -521,12 +567,7 @@ class PageHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(child: Row(
-              children: [
-                Text("Customer ",style: Theme.of(context).textTheme.headline2!,),
-                Text(customerName,style: Theme.of(context).textTheme.headline2!,),
-              ],
-            )),
+            Expanded(child: Text("Customer"+ customerName,style: Theme.of(context).textTheme.headline2!,overflow: TextOverflow.fade,)),
             if(save!=null)TextButton(onPressed: (){
               save!();
             }, child: const Text("Save")),

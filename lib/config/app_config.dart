@@ -75,6 +75,9 @@ class AppConfig{
   static const String operate6 = "6";	//输入 (限制1个小数点)
   static const String operate7 = "7";	//选择: Clean / Dirty
   static const String operate8 = "8";	//选择: Acceptable / To be improve
+  static const String operate9 = "9";	//选择: Good / Bad selection
+  static const String operate10 = "10";	//选择: Carry over / No carryover selection
+  static const String operate11 = "11";	//选择: Clear / Turbid selection
 
   static const String  preOperate0 = "0";	//展示
   static const String  preOperate1 = "1";	//输入

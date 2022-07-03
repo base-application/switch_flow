@@ -100,7 +100,7 @@ class _PerformanceState extends State<Performance> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                    Text(e.content!.first! + "." + e.content!.title!),
+                                    Text((e.content!.num?.toString()??'') + "." + e.content!.title!),
                                     const SizedBox(height: 10,),
                                     Container(
                                       padding: const EdgeInsets.all(16),

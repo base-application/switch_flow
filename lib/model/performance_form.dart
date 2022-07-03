@@ -50,6 +50,7 @@ class Content {
   String? second;
   String? location;
   String? machine;
+  int? num;
   List<Child>? child;
 
   Content({this.title, this.first, this.child});
@@ -58,6 +59,7 @@ class Content {
     title = json['title'];
     first = json['first'];
     second = json['second'];
+    num = json['num'];
     machine = json['machine'];
     location = json['location'];
     if (json['child'] != null) {
@@ -75,6 +77,7 @@ class Content {
     data['second'] = second??"";
     data['machine'] = machine??"";
     data['location'] = location??"";
+    data['num'] = num??"";
     if (child != null) {
       data['child'] = child!.map((v) => v.toJson()).toList();
     }

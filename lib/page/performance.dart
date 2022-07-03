@@ -135,7 +135,7 @@ class _PerformanceState extends State<Performance> {
                                               }
                                               if(level3.contains(c.lable)){
                                                 return Offstage(
-                                                  offstage: e.settleSameDay == "No",
+                                                  offstage: e.settleSameDay != "No",
                                                   child:  Container(
                                                     padding: const EdgeInsets.only(top: 20),
                                                     alignment: Alignment.centerLeft,

@@ -559,7 +559,7 @@ class _PreventiveState extends State<Preventive> {
     Child? b = p.child!.firstWhereOrNull((element) => element.lable == calibratedTime);
     if(a!=null  && b!=null&& a.value!.isNotEmpty && b.value!.isNotEmpty){
 
-      return ((((int.parse(a.value!)) / (int.parse(b.value!)) ) *3600) /1000).toStringAsFixed(2);
+      return ((((double.parse(a.value!)) / (double.parse(b.value!)) ) *3600) /1000).toStringAsFixed(2);
     }
     return "";
   }
